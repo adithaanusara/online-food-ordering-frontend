@@ -1,0 +1,5 @@
+import { useEffect, useState } from 'react';
+import CategoryForm from '../../components/categories/CategoryForm';
+import { Category } from '../../types';
+import { createCategory, deleteCategory, getCategories } from '../../services/categoryService';
+export default function CategoriesPage(){ const [categories,setCategories]=useState<Category[]>([]); useEffect(()=>{getCategories().then(setCategories)},[]); async function add(data:Omit<Category,'id'>){ const c=await createCategory(data); setCategories(prev=>[...prev,c]); } async function remove(id:number){ await deleteCategory(id); setCategories(prev=>prev.filter(c=>c.id!==id)); } return <div className="max-w-4xl mx-auto px-4 py-8"><h1 className="text-3xl font-bold mb-5">Manage Categories</h1><CategoryForm onSubmit={add}/><div className="grid gap-3 mt-5">{categories.map(c=><div className="card flex justify-between" key={c.id}><div><b>{c.name}</b><p>{c.description}</p></div><button onClick={()=>remove(c.id)} className="btn-secondary">Delete</button></div>)}</div></div> }

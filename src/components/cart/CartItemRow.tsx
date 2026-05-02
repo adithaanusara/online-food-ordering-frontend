@@ -1,0 +1,3 @@
+import { CartItem } from '../../types';
+import { useCart } from '../../context/CartContext';
+export default function CartItemRow({item}:{item:CartItem}){ const {updateQuantity,removeItem}=useCart(); return <div className="card flex items-center gap-4"><img src={item.food.imageUrl} className="w-20 h-20 rounded-xl object-cover"/><div className="flex-1"><h3 className="font-bold">{item.food.name}</h3><p className="text-orange-600">LKR {item.food.price}</p></div><input className="input w-24" type="number" min={1} value={item.quantity} onChange={e=>updateQuantity(item.food.id,Number(e.target.value))}/><button className="btn-secondary" onClick={()=>removeItem(item.food.id)}>Remove</button></div> }

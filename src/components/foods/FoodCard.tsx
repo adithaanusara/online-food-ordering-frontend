@@ -1,0 +1,3 @@
+import { FoodItem } from '../../types';
+import { useCart } from '../../context/CartContext';
+export default function FoodCard({food}:{food:FoodItem}){ const {addToCart}=useCart(); return <div className="card overflow-hidden p-0"><img src={food.imageUrl} alt={food.name} className="h-44 w-full object-cover"/><div className="p-5"><h3 className="text-lg font-bold">{food.name}</h3><p className="text-slate-600 text-sm mt-1">{food.description}</p><div className="mt-4 flex items-center justify-between"><span className="font-bold text-orange-600">LKR {food.price.toFixed(2)}</span><button disabled={!food.available} onClick={()=>addToCart(food)} className="btn">Add</button></div></div></div> }

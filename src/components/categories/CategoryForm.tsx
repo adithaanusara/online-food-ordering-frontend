@@ -1,0 +1,3 @@
+import { useState } from 'react';
+import { Category } from '../../types';
+export default function CategoryForm({onSubmit}:{onSubmit:(data:Omit<Category,'id'>)=>void}){ const [name,setName]=useState(''); const [description,setDescription]=useState(''); function submit(e:React.FormEvent){ e.preventDefault(); if(!name.trim()) return; onSubmit({name,description}); setName(''); setDescription(''); } return <form onSubmit={submit} className="card grid gap-3"><input className="input" placeholder="Category name" value={name} onChange={e=>setName(e.target.value)}/><textarea className="input" placeholder="Description" value={description} onChange={e=>setDescription(e.target.value)}/><button className="btn">Save Category</button></form> }
