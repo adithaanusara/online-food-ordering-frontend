@@ -1,6 +1,71 @@
-import { Link, NavLink } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useCart } from '../../context/CartContext';
-export default function Navbar(){ const {user,logout}=useAuth(); const {items}=useCart(); const nav='px-3 py-2 rounded-lg hover:bg-orange-100';
- return <nav className="bg-white border-b sticky top-0 z-10"><div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"><Link to="/" className="text-2xl font-bold text-orange-600">FoodOrder</Link><div className="flex items-center gap-2"><NavLink className={nav} to="/foods">Foods</NavLink>{user&&<NavLink className={nav} to="/orders">Orders</NavLink>}{user?.role==='ADMIN'&&<NavLink className={nav} to="/categories">Categories</NavLink>}<NavLink className="relative px-3 py-2 rounded-lg hover:bg-orange-100" to="/cart"><ShoppingCart size={20}/>{items.length>0&&<span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full px-1">{items.length}</span>}</NavLink>{user?<><span className="text-sm">Hi, {user.name}</span><button onClick={logout} className="btn-secondary">Logout</button></>:<NavLink to="/signin" className="btn">Sign In</NavLink>}</div></div></nav> }
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
+export default function Navbar() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  };
+
+  return (
+    <nav className="bg-white shadow-md px-6 py-4 flex items-center justify-between">
+      <Link to="/" className="text-2xl font-bold text-orange-500">
+        FoodExpress
+      </Link>
+
+      <div className="flex items-center gap-5">
+        {!isAuthenticated && (
+          <>
+            <Link to="/signin" className="text-slate-700 hover:text-orange-500">
+              Sign In
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
+
+        {isAuthenticated && user?.role === "CUSTOMER" && (
+          <>
+            <Link to="/customer/dashboard">Dashboard</Link>
+            <Link to="/foods">Foods</Link>
+            <Link to="/cart">Cart</Link>
+            <Link to="/orders/my">My Orders</Link>
+          </>
+        )}
+
+        {isAuthenticated && user?.role === "DRIVER" && (
+          <>
+            <Link to="/driver/dashboard">Driver Dashboard</Link>
+            <Link to="/driver/orders">Assigned Orders</Link>
+            <Link to="/driver/history">Delivery History</Link>
+          </>
+        )}
+
+        {isAuthenticated && user?.role === "OWNER" && (
+          <>
+            <Link to="/owner/dashboard">Owner Dashboard</Link>
+            <Link to="/owner/foods">Manage Foods</Link>
+            <Link to="/owner/orders">Manage Orders</Link>
+            <Link to="/owner/drivers">Drivers</Link>
+          </>
+        )}
+
+        {isAuthenticated && (
+          <button
+            onClick={handleLogout}
+            className="bg-slate-800 text-white px-4 py-2 rounded-lg"
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </nav>
+  );
+}

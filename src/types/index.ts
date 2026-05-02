@@ -1,9 +1,35 @@
-export type Role = 'CUSTOMER' | 'ADMIN';
-export interface User { id: number; name: string; email: string; role: Role; }
-export interface AuthResponse { token: string; user: User; }
-export interface Category { id: number; name: string; description?: string; }
-export interface FoodItem { id: number; name: string; description: string; price: number; imageUrl: string; categoryId: number; available: boolean; }
-export interface CartItem { food: FoodItem; quantity: number; }
-export type PaymentMethod = 'CASH_ON_DELIVERY' | 'CARD';
-export interface OrderItemRequest { foodItemId: number; quantity: number; }
-export interface Order { id: number; totalAmount: number; status: string; deliveryAddress: string; paymentMethod: PaymentMethod; createdAt: string; items: CartItem[]; }
+export type UserRole = "CUSTOMER" | "DRIVER" | "OWNER";
+
+export type Gender = "MALE" | "FEMALE" | "OTHER";
+
+export interface User {
+  id: number;
+  fullName: string;
+  email: string;
+  role: UserRole;
+
+  // Driver only fields
+  nicNumber?: string;
+  gender?: Gender;
+  phone?: string;
+  vehicleType?: string;
+  vehicleNumber?: string;
+}
+
+export interface SignUpData {
+  fullName: string;
+  email: string;
+  password: string;
+  role: "CUSTOMER" | "DRIVER";
+
+  nicNumber?: string;
+  gender?: Gender;
+  phone?: string;
+  vehicleType?: string;
+  vehicleNumber?: string;
+}
+
+export interface SignInData {
+  email: string;
+  password: string;
+}
