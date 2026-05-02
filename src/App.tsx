@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
 import Navbar from "./components/layout/Navbar";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 
@@ -6,6 +7,12 @@ import SignInPage from "./pages/auth/SignInPage";
 import SignUpPage from "./pages/auth/SignUpPage";
 
 import CustomerDashboardPage from "./pages/customer/CustomerDashboardPage";
+
+import FoodsPage from "./pages/foods/FoodsPage";
+import CartPage from "./pages/cart/CartPage";
+import CheckoutPage from "./pages/checkout/CheckoutPage";
+import OrdersPage from "./pages/orders/OrdersPage";
+
 import DriverDashboardPage from "./pages/driver/DriverDashboardPage";
 import DriverOrdersPage from "./pages/driver/DriverOrdersPage";
 import DeliveryHistoryPage from "./pages/driver/DeliveryHistoryPage";
@@ -36,6 +43,42 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={["CUSTOMER"]}>
               <CustomerDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/foods"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+              <FoodsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders/my"
+          element={
+            <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+              <OrdersPage />
             </ProtectedRoute>
           }
         />
@@ -111,6 +154,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>
     </BrowserRouter>
   );

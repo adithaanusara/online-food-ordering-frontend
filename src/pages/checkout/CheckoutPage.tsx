@@ -1,6 +1,96 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
-import { placeOrder } from '../../services/orderService';
-import { PaymentMethod } from '../../types';
-export default function CheckoutPage(){ const {items,total,clearCart}=useCart(); const [address,setAddress]=useState(''); const [payment,setPayment]=useState<PaymentMethod>('CASH_ON_DELIVERY'); const nav=useNavigate(); async function submit(e:React.FormEvent){ e.preventDefault(); const order=await placeOrder(items.map(i=>({foodItemId:i.food.id,quantity:i.quantity})),address,payment); const saved=JSON.parse(localStorage.getItem('orders')||'[]'); localStorage.setItem('orders',JSON.stringify([{...order,totalAmount:total,items},...saved])); clearCart(); nav('/orders'); } return <div className="max-w-xl mx-auto py-10"><form onSubmit={submit} className="card grid gap-4"><h1 className="text-2xl font-bold">Checkout</h1><textarea required className="input" placeholder="Delivery address" value={address} onChange={e=>setAddress(e.target.value)}/><select className="input" value={payment} onChange={e=>setPayment(e.target.value as PaymentMethod)}><option value="CASH_ON_DELIVERY">Cash on Delivery</option><option value="CARD">Card</option></select><b>Total: LKR {total.toFixed(2)}</b><button disabled={items.length===0} className="btn">Place Order</button></form></div> }
+import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function CheckoutPage() {
+  const navigate = useNavigate();
+
+  const [address, setAddress] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("CASH_ON_DELIVERY");
+  const [error, setError] = useState("");
+
+  const handlePlaceOrder = (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const cart = JSON.parse(localStorage.getItem("food_cart") || "[]");
+
+    if (cart.length === 0) {
+      setError("Cart is empty");
+      return;
+    }
+
+    if (!address.trim()) {
+      setError("Delivery address is required");
+      return;
+    }
+
+    const orders = JSON.parse(localStorage.getItem("food_orders") || "[]");
+
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      items: cart,
+      address,
+      paymentMethod,
+      status: "PENDING",
+      createdAt: new Date().toLocaleString(),
+    };
+
+    localStorage.setItem("food_orders", JSON.stringify([newOrder, ...orders]));
+    localStorage.removeItem("food_cart");
+
+    alert("Order placed successfully");
+    navigate("/orders/my");
+  };
+
+  return (
+    <div className="p-8 bg-slate-100 min-h-screen">
+      <h1 className="text-3xl font-bold text-slate-800">Checkout</h1>
+
+      <form
+        onSubmit={handlePlaceOrder}
+        className="bg-white rounded-2xl shadow p-6 mt-6 max-w-xl"
+      >
+        {error && (
+          <div className="bg-red-100 text-red-700 px-4 py-3 rounded-lg mb-5">
+            {error}
+          </div>
+        )}
+
+        <div>
+          <label className="block font-semibold text-slate-700">
+            Delivery Address
+          </label>
+          <textarea
+            className="mt-2 w-full border rounded-lg px-4 py-3"
+            rows={4}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter your delivery address"
+          />
+        </div>
+
+        <div className="mt-5">
+          <label className="block font-semibold text-slate-700">
+            Payment Method
+          </label>
+
+          <select
+            className="mt-2 w-full border rounded-lg px-4 py-3"
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          >
+            <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+            <option value="CARD_PAYMENT">Card Payment</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className="mt-6 bg-orange-500 text-white px-6 py-3 rounded-lg font-bold"
+        >
+          Place Order
+        </button>
+      </form>
+    </div>
+  );
+}
