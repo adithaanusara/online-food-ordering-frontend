@@ -1,13 +1,14 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Gender } from "../../types";
 import { useAuth } from "../../context/AuthContext";
 
 export default function SignUpPage() {
-  const navigate = useNavigate();
   const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const [role, setRole] = useState<"CUSTOMER" | "DRIVER">("CUSTOMER");
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,18 +20,19 @@ export default function SignUpPage() {
   const [vehicleNumber, setVehicleNumber] = useState("");
 
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  function submit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
     if (!fullName.trim() || !email.trim() || !password.trim()) {
-      setError("Full name, email and password are required");
+      setError("Full name, email and password are required.");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("Password must be at least 6 characters.");
       return;
     }
 
@@ -41,12 +43,14 @@ export default function SignUpPage() {
         !vehicleType.trim() ||
         !vehicleNumber.trim()
       ) {
-        setError("Driver details are required");
+        setError("Driver details are required.");
         return;
       }
     }
 
     try {
+      setSubmitting(true);
+
       signUp({
         fullName,
         email,
@@ -65,42 +69,45 @@ export default function SignUpPage() {
         navigate("/customer/dashboard");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Sign up failed");
+      setError(
+        err instanceof Error ? err.message : "Unable to create account."
+      );
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4 py-10">
-      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center text-slate-800">
-          Create Account
-        </h1>
+    <div className="auth-screen">
+      <div className="auth-top-image auth-top-image-signup"></div>
+      <div className="auth-image-overlay"></div>
 
-        <p className="text-center text-slate-500 mt-2">
-          Register as a customer or delivery driver
-        </p>
+      <div className="smoke smoke-1"></div>
+      <div className="smoke smoke-2"></div>
+      <div className="smoke smoke-3"></div>
+      <div className="smoke smoke-4"></div>
 
-        {error && (
-          <div className="mt-5 bg-red-100 text-red-700 px-4 py-3 rounded-lg">
-            {error}
+      <div className="auth-panel">
+        <div className="auth-brand-row">
+          <Link to="/" className="auth-brand">
+            FoodExpress
+          </Link>
+        </div>
+
+        <div className="auth-content auth-content-signup">
+          <div className="auth-title-wrap">
+            <h1 className="auth-title auth-title-small">Sign Up</h1>
+            <p className="auth-subtitle">Join us and start ordering today!</p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Register As
-            </label>
+          <form onSubmit={submit} className="auth-form">
+            {error && <div className="auth-error">{error}</div>}
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="auth-role-select">
               <button
                 type="button"
                 onClick={() => setRole("CUSTOMER")}
-                className={`border rounded-xl py-3 font-semibold ${
-                  role === "CUSTOMER"
-                    ? "bg-orange-500 text-white border-orange-500"
-                    : "bg-white text-slate-700"
-                }`}
+                className={role === "CUSTOMER" ? "active" : ""}
               >
                 Customer
               </button>
@@ -108,82 +115,60 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={() => setRole("DRIVER")}
-                className={`border rounded-xl py-3 font-semibold ${
-                  role === "DRIVER"
-                    ? "bg-orange-500 text-white border-orange-500"
-                    : "bg-white text-slate-700"
-                }`}
+                className={role === "DRIVER" ? "active" : ""}
               >
                 Driver
               </button>
             </div>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              className="mt-1 w-full border rounded-lg px-4 py-3"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Enter full name"
-            />
-          </div>
+            <div className="auth-field">
+              <span className="auth-icon">👤</span>
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                autoComplete="name"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="mt-1 w-full border rounded-lg px-4 py-3"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@email.com"
-            />
-          </div>
+            <div className="auth-field">
+              <span className="auth-icon">✉️</span>
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="mt-1 w-full border rounded-lg px-4 py-3"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Minimum 6 characters"
-            />
-          </div>
+            <div className="auth-field">
+              <span className="auth-icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+              />
+            </div>
 
-          {role === "DRIVER" && (
-            <div className="border-t pt-5">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">
-                Driver Details
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">
-                    NIC Number
-                  </label>
+            {role === "DRIVER" && (
+              <>
+                <div className="auth-field">
+                  <span className="auth-icon">🪪</span>
                   <input
                     type="text"
-                    className="mt-1 w-full border rounded-lg px-4 py-3"
+                    placeholder="NIC Number"
                     value={nicNumber}
                     onChange={(e) => setNicNumber(e.target.value)}
-                    placeholder="Enter NIC number"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">
-                    Gender
-                  </label>
+                <div className="auth-field">
+                  <span className="auth-icon">⚧</span>
                   <select
-                    className="mt-1 w-full border rounded-lg px-4 py-3"
                     value={gender}
                     onChange={(e) => setGender(e.target.value as Gender)}
                   >
@@ -193,62 +178,54 @@ export default function SignUpPage() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">
-                    Phone Number
-                  </label>
+                <div className="auth-field">
+                  <span className="auth-icon">📞</span>
                   <input
                     type="text"
-                    className="mt-1 w-full border rounded-lg px-4 py-3"
+                    placeholder="Phone Number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="0771234567"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">
-                    Vehicle Type
-                  </label>
+                <div className="auth-field">
+                  <span className="auth-icon">🏍️</span>
                   <input
                     type="text"
-                    className="mt-1 w-full border rounded-lg px-4 py-3"
+                    placeholder="Vehicle Type"
                     value={vehicleType}
                     onChange={(e) => setVehicleType(e.target.value)}
-                    placeholder="Bike / Three Wheeler / Car"
                   />
                 </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Vehicle Number
-                  </label>
+                <div className="auth-field">
+                  <span className="auth-icon">🔢</span>
                   <input
                     type="text"
-                    className="mt-1 w-full border rounded-lg px-4 py-3"
+                    placeholder="Vehicle Number"
                     value={vehicleNumber}
                     onChange={(e) => setVehicleNumber(e.target.value)}
-                    placeholder="ABC-1234"
                   />
                 </div>
-              </div>
-            </div>
-          )}
+              </>
+            )}
 
-          <button
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg"
-          >
-            Sign Up
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={submitting}
+            >
+              {submitting ? "Creating..." : "Create Account"}
+            </button>
+          </form>
 
-        <p className="text-center text-slate-600 mt-5">
-          Already have an account?{" "}
-          <Link to="/signin" className="text-orange-600 font-semibold">
-            Sign In
-          </Link>
-        </p>
+          <p className="auth-switch-text">
+            Already have an account?{" "}
+            <Link to="/signin" className="auth-switch-link">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

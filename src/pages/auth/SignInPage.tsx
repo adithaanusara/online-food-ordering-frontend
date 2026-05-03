@@ -1,125 +1,128 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function SignInPage() {
-  const navigate = useNavigate();
   const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  function goToCorrectDashboard() {
+    const currentUser = JSON.parse(
+      localStorage.getItem("food_ordering_current_user") || "null"
+    );
+
+    if (currentUser?.role === "OWNER") {
+      navigate("/owner/dashboard");
+    } else if (currentUser?.role === "DRIVER") {
+      navigate("/driver/dashboard");
+    } else {
+      navigate("/customer/dashboard");
+    }
+  }
+
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
     if (!email.trim() || !password.trim()) {
-      setError("Email and password are required");
+      setError("Email and password are required.");
       return;
     }
 
     try {
-      const loggedUser = signIn({ email, password });
+      setSubmitting(true);
 
-      /**
-       * signIn context function void return නම්,
-       * authService use කරන method එක direct return කරන විදිහට
-       * AuthContext update කරන්න ඕන.
-       */
+      signIn({
+        email,
+        password,
+      });
+
+      goToCorrectDashboard();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Sign in failed");
-    }
-  };
-
-  const handleLogin = (e: FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    try {
-      signIn({ email, password });
-
-      const currentUser = JSON.parse(
-        localStorage.getItem("food_ordering_current_user") || "null"
+      setError(
+        err instanceof Error ? err.message : "Unable to sign in. Try again."
       );
-
-      if (currentUser?.role === "OWNER") {
-        navigate("/owner/dashboard");
-      } else if (currentUser?.role === "DRIVER") {
-        navigate("/driver/dashboard");
-      } else {
-        navigate("/customer/dashboard");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Sign in failed");
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center text-slate-800">
-          Sign In
-        </h1>
+    <div className="auth-screen">
+      <div className="auth-top-image auth-top-image-signin"></div>
+      <div className="auth-image-overlay"></div>
 
-        <p className="text-center text-slate-500 mt-2">
-          Login to your food ordering account
-        </p>
+      <div className="smoke smoke-1"></div>
+      <div className="smoke smoke-2"></div>
+      <div className="smoke smoke-3"></div>
+      <div className="smoke smoke-4"></div>
 
-        {error && (
-          <div className="mt-5 bg-red-100 text-red-700 px-4 py-3 rounded-lg">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="mt-6 space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="mt-1 w-full border rounded-lg px-4 py-3"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@email.com"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="mt-1 w-full border rounded-lg px-4 py-3"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg"
-          >
-            Sign In
-          </button>
-        </form>
-
-        <div className="mt-5 bg-slate-100 rounded-lg p-4 text-sm text-slate-600">
-          <p className="font-semibold text-slate-800">Owner Login:</p>
-          <p>Email: owner@food.com</p>
-          <p>Password: owner123</p>
+      <div className="auth-panel">
+        <div className="auth-brand-row">
+          <Link to="/" className="auth-brand">
+            FoodExpress
+          </Link>
         </div>
 
-        <p className="text-center text-slate-600 mt-5">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-orange-600 font-semibold">
-            Sign Up
-          </Link>
-        </p>
+        <div className="auth-content">
+          <div className="auth-title-wrap">
+            <h1 className="auth-title">Delicious</h1>
+            <p className="auth-subtitle">Recipes for every day!</p>
+          </div>
+
+          <form onSubmit={submit} className="auth-form">
+            {error && <div className="auth-error">{error}</div>}
+
+            <div className="auth-field">
+              <span className="auth-icon">👤</span>
+              <input
+                type="email"
+                placeholder="Login"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+              />
+            </div>
+
+            <div className="auth-field">
+              <span className="auth-icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={submitting}
+            >
+              {submitting ? "Signing In..." : "Sign In"}
+            </button>
+          </form>
+
+          <div className="auth-demo-box">
+            <p>Owner Login</p>
+            <span>Email: owner@food.com</span>
+            <span>Password: owner123</span>
+          </div>
+
+          <p className="auth-switch-text">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" className="auth-switch-link">
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
