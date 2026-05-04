@@ -8,12 +8,13 @@ export default function SignInPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   function goToCorrectDashboard() {
     const currentUser = JSON.parse(
-      localStorage.getItem("food_ordering_current_user") || "null"
+      localStorage.getItem("food_ordering_current_user") || "null",
     );
 
     if (currentUser?.role === "OWNER") {
@@ -45,7 +46,7 @@ export default function SignInPage() {
       goToCorrectDashboard();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Unable to sign in. Try again."
+        err instanceof Error ? err.message : "Unable to sign in. Try again.",
       );
     } finally {
       setSubmitting(false);
@@ -69,45 +70,46 @@ export default function SignInPage() {
       </div>
 
       <section className="premium-auth-showcase premium-food-poster">
-  <Link to="/" className="premium-auth-logo premium-poster-logo">
-    <span className="chef-icon">♨</span>
-    <strong>FoodExpress</strong>
-    <small>FOOD EXPERIENCE</small>
-  </Link>
+        <Link to="/" className="premium-auth-logo premium-poster-logo">
+          <span className="chef-icon">♨</span>
+          <strong>FoodExpress</strong>
+          <small>FOOD EXPERIENCE</small>
+        </Link>
 
-  <div className="premium-poster-text">
-    <p className="poster-mini">What is your</p>
-    <h1>
-      Favorite <span>Food</span>
-    </h1>
-    <p className="poster-sub">today?</p>
-    <p className="poster-description">
-      Discover premium meals, fresh flavors and your most loved dishes in one place.
-    </p>
-  </div>
+        <div className="premium-poster-text">
+          <p className="poster-mini">What is your</p>
+          <h1>
+            Favorite <span>Food</span>
+          </h1>
+          <p className="poster-sub">today?</p>
+          <p className="poster-description">
+            Discover premium meals, fresh flavors and your most loved dishes in
+            one place.
+          </p>
+        </div>
 
-  <div className="poster-orbit-system">
-    <div className="poster-orbit orbit-1">
-      <div className="poster-plate poster-plate-1"></div>
-    </div>
+        <div className="poster-orbit-system">
+          <div className="poster-orbit orbit-1">
+            <div className="poster-plate poster-plate-1"></div>
+          </div>
 
-    <div className="poster-orbit orbit-2">
-      <div className="poster-plate poster-plate-2"></div>
-    </div>
+          <div className="poster-orbit orbit-2">
+            <div className="poster-plate poster-plate-2"></div>
+          </div>
 
-    <div className="poster-orbit orbit-3">
-      <div className="poster-plate poster-plate-3"></div>
-    </div>
+          <div className="poster-orbit orbit-3">
+            <div className="poster-plate poster-plate-3"></div>
+          </div>
 
-    <div className="poster-orbit orbit-4">
-      <div className="poster-plate poster-plate-4"></div>
-    </div>
+          <div className="poster-orbit orbit-4">
+            <div className="poster-plate poster-plate-4"></div>
+          </div>
 
-    <div className="poster-orbit orbit-5">
-      <div className="poster-plate poster-plate-5"></div>
-    </div>
-  </div>
-</section>
+          <div className="poster-orbit orbit-5">
+            <div className="poster-plate poster-plate-5"></div>
+          </div>
+        </div>
+      </section>
 
       <section className="premium-auth-card-wrap">
         <div className="premium-auth-card">
@@ -146,13 +148,21 @@ export default function SignInPage() {
             <label className="premium-input">
               <span>🔒</span>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
               />
-              <small>👁</small>
+
+              <button
+                type="button"
+                className="password-eye-btn"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "🙈" : "👁"}
+              </button>
             </label>
 
             <div className="premium-forgot">Forgot Password?</div>
