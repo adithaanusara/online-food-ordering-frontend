@@ -1,71 +1,79 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const { cartCount } = useCart();
 
-  const handleLogout = () => {
-    logout();
+  const currentUser = JSON.parse(
+    localStorage.getItem("food_ordering_current_user") || "null"
+  );
+
+  const isLoggedIn = Boolean(currentUser);
+
+  function logout() {
+    localStorage.removeItem("food_ordering_current_user");
+    localStorage.removeItem("food_ordering_token");
     navigate("/signin");
-  };
+  }
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex items-center justify-between">
-      <Link to="/" className="text-2xl font-bold text-orange-500">
+    <header className="app-navbar">
+      <Link to="/" className="app-logo">
         FoodExpress
       </Link>
 
-      <div className="flex items-center gap-5">
-        {!isAuthenticated && (
+      <nav className="app-nav-links">
+        {isLoggedIn && currentUser?.role === "CUSTOMER" && (
           <>
-            <Link to="/signin" className="text-slate-700 hover:text-orange-500">
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg"
-            >
-              Sign Up
-            </Link>
+            <NavLink to="/customer/dashboard">Dashboard</NavLink>
+            <NavLink to="/foods">Foods</NavLink>
+
+            <NavLink to="/cart" className="cart-nav-link">
+              <span className="cart-nav-icon">🛒</span>
+              <span>Cart</span>
+
+              {cartCount > 0 && (
+                <span className="cart-notification-badge">{cartCount}</span>
+              )}
+            </NavLink>
+
+            <NavLink to="/orders">My Orders</NavLink>
           </>
         )}
 
-        {isAuthenticated && user?.role === "CUSTOMER" && (
+        {isLoggedIn && currentUser?.role === "DRIVER" && (
           <>
-            <Link to="/customer/dashboard">Dashboard</Link>
-            <Link to="/foods">Foods</Link>
-            <Link to="/cart">Cart</Link>
-            <Link to="/orders/my">My Orders</Link>
+            <NavLink to="/driver/dashboard">Dashboard</NavLink>
+            <NavLink to="/driver/orders">Orders</NavLink>
+            <NavLink to="/driver/history">History</NavLink>
           </>
         )}
 
-        {isAuthenticated && user?.role === "DRIVER" && (
+        {isLoggedIn && currentUser?.role === "OWNER" && (
           <>
-            <Link to="/driver/dashboard">Driver Dashboard</Link>
-            <Link to="/driver/orders">Assigned Orders</Link>
-            <Link to="/driver/history">Delivery History</Link>
+            <NavLink to="/owner/dashboard">Dashboard</NavLink>
+            <NavLink to="/owner/foods">Foods</NavLink>
+            <NavLink to="/owner/orders">Orders</NavLink>
+            <NavLink to="/owner/drivers">Drivers</NavLink>
+            <NavLink to="/owner/customers">Customers</NavLink>
           </>
         )}
 
-        {isAuthenticated && user?.role === "OWNER" && (
+        {!isLoggedIn && (
           <>
-            <Link to="/owner/dashboard">Owner Dashboard</Link>
-            <Link to="/owner/foods">Manage Foods</Link>
-            <Link to="/owner/orders">Manage Orders</Link>
-            <Link to="/owner/drivers">Drivers</Link>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/signin">Sign In</NavLink>
+            <NavLink to="/signup">Sign Up</NavLink>
           </>
         )}
 
-        {isAuthenticated && (
-          <button
-            onClick={handleLogout}
-            className="bg-slate-800 text-white px-4 py-2 rounded-lg"
-          >
+        {isLoggedIn && (
+          <button type="button" className="app-logout-btn" onClick={logout}>
             Logout
           </button>
         )}
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }

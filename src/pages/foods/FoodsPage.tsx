@@ -1,111 +1,161 @@
-import { useState } from "react";
-import { foods } from "../../data/foods";
+import { useMemo, useState } from "react";
+import { useCart } from "../../context/CartContext";
+
+type Food = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  description: string;
+  image: string;
+};
+
+const foods: Food[] = [
+  {
+    id: "food-1",
+    name: "Chicken Pizza",
+    category: "Pizza",
+    price: 2200,
+    description: "Hot pizza with extra cheese and chicken toppings.",
+    image:
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-2",
+    name: "Cheese Burger",
+    category: "Burger",
+    price: 1450,
+    description: "Fresh burger with cheese, sauce, and crispy fries.",
+    image:
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-3",
+    name: "Hot Coffee",
+    category: "Coffee",
+    price: 650,
+    description: "Freshly brewed coffee with rich aroma and smooth taste.",
+    image:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-4",
+    name: "Chicken Rice & Koththu",
+    category: "Koththu",
+    price: 1800,
+    description: "Spicy rice and koththu mixed with chicken and sauces.",
+    image:
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-5",
+    name: "Creamy Pasta",
+    category: "Pasta",
+    price: 1750,
+    description: "Creamy pasta with fresh herbs and premium ingredients.",
+    image:
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-6",
+    name: "Chocolate Dessert",
+    category: "Dessert",
+    price: 950,
+    description: "Sweet chocolate dessert for your premium food experience.",
+    image:
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop",
+  },
+];
+
+const categories = ["All", "Pizza", "Burger", "Coffee", "Koththu", "Pasta", "Dessert"];
 
 export default function FoodsPage() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("ALL");
+  const { addToCart, isInCart } = useCart();
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchText, setSearchText] = useState("");
 
-  const categories = ["ALL", ...Array.from(new Set(foods.map((f) => f.category)))];
+  const filteredFoods = useMemo(() => {
+    return foods.filter((food) => {
+      const categoryMatch =
+        selectedCategory === "All" || food.category === selectedCategory;
 
-  const filteredFoods = foods.filter((food) => {
-    const matchSearch = food.name.toLowerCase().includes(search.toLowerCase());
-    const matchCategory = category === "ALL" || food.category === category;
+      const searchMatch =
+        food.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        food.category.toLowerCase().includes(searchText.toLowerCase());
 
-    return matchSearch && matchCategory;
-  });
-
-  const addToCart = (food: (typeof foods)[0]) => {
-    const cart = JSON.parse(localStorage.getItem("food_cart") || "[]");
-
-    const existingItem = cart.find((item: any) => item.id === food.id);
-
-    let updatedCart;
-
-    if (existingItem) {
-      updatedCart = cart.map((item: any) =>
-        item.id === food.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      updatedCart = [...cart, { ...food, quantity: 1 }];
-    }
-
-    localStorage.setItem("food_cart", JSON.stringify(updatedCart));
-    alert(`${food.name} added to cart`);
-  };
+      return categoryMatch && searchMatch;
+    });
+  }, [selectedCategory, searchText]);
 
   return (
-    <div className="p-8 bg-slate-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-slate-800">Available Foods</h1>
-      <p className="text-slate-600 mt-2">
-        Browse foods, filter by category and add items to your cart.
-      </p>
+    <main className="foods-page">
+      <section className="foods-hero">
+        <span className="foods-mini-title">FoodExpress Menu</span>
+        <h1>Browse Premium Foods</h1>
+        <p>
+          Choose your favorite food items and add them to your cart. Your cart
+          count will update instantly.
+        </p>
 
-      <div className="grid md:grid-cols-2 gap-4 mt-6">
-        <input
-          type="text"
-          placeholder="Search foods..."
-          className="border rounded-lg px-4 py-3"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="foods-filter-bar">
+          <input
+            type="text"
+            placeholder="Search foods..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
 
-        <select
-          className="border rounded-lg px-4 py-3"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat === "ALL" ? "All Categories" : cat}
-            </option>
-          ))}
-        </select>
-      </div>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            {categories.map((category) => (
+              <option key={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+      </section>
 
-      <div className="grid md:grid-cols-3 gap-6 mt-8">
-        {filteredFoods.map((food) => (
-          <div key={food.id} className="bg-white rounded-2xl shadow overflow-hidden">
-            <img
-              src={food.image}
-              alt={food.name}
-              className="w-full h-48 object-cover"
-            />
+      <section className="foods-grid">
+        {filteredFoods.map((food) => {
+          const added = isInCart(food.id);
 
-            <div className="p-5">
-              <div className="flex justify-between items-start">
-                <h2 className="text-xl font-bold text-slate-800">
-                  {food.name}
-                </h2>
-
-                <span className="text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full">
-                  {food.category}
-                </span>
+          return (
+            <article className="food-card" key={food.id}>
+              <div className="food-card-image">
+                <img src={food.image} alt={food.name} />
+                <span>{food.category}</span>
               </div>
 
-              <p className="text-slate-600 mt-2">{food.description}</p>
+              <div className="food-card-body">
+                <h3>{food.name}</h3>
+                <p>{food.description}</p>
 
-              <div className="flex justify-between items-center mt-5">
-                <p className="text-lg font-bold text-orange-500">
-                  Rs. {food.price}
-                </p>
+                <div className="food-card-bottom">
+                  <strong>LKR {food.price.toLocaleString()}</strong>
 
-                <button
-                  onClick={() => addToCart(food)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
-                >
-                  Add to Cart
-                </button>
+                  <button
+                    type="button"
+                    className={added ? "add-cart-btn added" : "add-cart-btn"}
+                    onClick={() =>
+                      addToCart({
+                        id: food.id,
+                        name: food.name,
+                        price: food.price,
+                        image: food.image,
+                        category: food.category,
+                        description: food.description,
+                      })
+                    }
+                  >
+                    {added ? "Add More +" : "Add to Cart"}
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredFoods.length === 0 && (
-        <p className="text-center text-slate-500 mt-10">No foods found.</p>
-      )}
-    </div>
+            </article>
+          );
+        })}
+      </section>
+    </main>
   );
 }

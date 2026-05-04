@@ -87,7 +87,7 @@ export default function App() {
         />
 
         <Route
-          path="/orders/my"
+          path="/orders"
           element={
             <>
               <Navbar />
