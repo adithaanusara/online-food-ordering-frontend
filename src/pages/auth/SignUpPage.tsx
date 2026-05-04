@@ -78,32 +78,87 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="auth-screen">
-      <div className="auth-top-image auth-top-image-signup"></div>
-      <div className="auth-image-overlay"></div>
+    <div className="premium-auth-page">
+      <div className="premium-gold-lines">
+        <span className="gold-line gold-line-one"></span>
+        <span className="gold-line gold-line-two"></span>
+        <span className="gold-line gold-line-three"></span>
+      </div>
 
-      <div className="smoke smoke-1"></div>
-      <div className="smoke smoke-2"></div>
-      <div className="smoke smoke-3"></div>
-      <div className="smoke smoke-4"></div>
+      <div className="premium-particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-      <div className="auth-panel">
-        <div className="auth-brand-row">
-          <Link to="/" className="auth-brand">
-            FoodExpress
-          </Link>
-        </div>
+      <section className="premium-auth-showcase premium-food-poster">
+  <Link to="/" className="premium-auth-logo premium-poster-logo">
+    <span className="chef-icon">♨</span>
+    <strong>FoodExpress</strong>
+    <small>FOOD EXPERIENCE</small>
+  </Link>
 
-        <div className="auth-content auth-content-signup">
-          <div className="auth-title-wrap">
-            <h1 className="auth-title auth-title-small">Sign Up</h1>
-            <p className="auth-subtitle">Join us and start ordering today!</p>
+  <div className="premium-poster-text">
+    <p className="poster-mini">Create your</p>
+    <h1>
+      Favorite <span>Food</span>
+    </h1>
+    <p className="poster-sub">account today</p>
+    <p className="poster-description">
+      Sign up now and enjoy premium meals, quick ordering, and a stylish food
+      experience.
+    </p>
+  </div>
+
+  <div className="poster-orbit-system">
+    <div className="poster-orbit orbit-1">
+      <div className="poster-plate poster-plate-1"></div>
+    </div>
+
+    <div className="poster-orbit orbit-2">
+      <div className="poster-plate poster-plate-2"></div>
+    </div>
+
+    <div className="poster-orbit orbit-3">
+      <div className="poster-plate poster-plate-3"></div>
+    </div>
+
+    <div className="poster-orbit orbit-4">
+      <div className="poster-plate poster-plate-4"></div>
+    </div>
+
+    <div className="poster-orbit orbit-5">
+      <div className="poster-plate poster-plate-5"></div>
+    </div>
+  </div>
+</section>
+
+      <section className="premium-auth-card-wrap">
+        <div className="premium-auth-card premium-signup-card">
+          <div className="premium-tabs">
+            <Link to="/signin">Login</Link>
+            <Link to="/signup" className="active">
+              Sign Up
+            </Link>
           </div>
 
-          <form onSubmit={submit} className="auth-form">
-            {error && <div className="auth-error">{error}</div>}
+          <div className="premium-card-divider">
+            <span></span>
+            <b>🍽</b>
+            <span></span>
+          </div>
 
-            <div className="auth-role-select">
+          <div className="premium-card-title">
+            <h2>Create Account</h2>
+            <p>Join us and start your food journey</p>
+          </div>
+
+          <form onSubmit={submit} className="premium-form">
+            {error && <div className="premium-error">{error}</div>}
+
+            <div className="premium-role-select">
               <button
                 type="button"
                 onClick={() => setRole("CUSTOMER")}
@@ -121,8 +176,8 @@ export default function SignUpPage() {
               </button>
             </div>
 
-            <div className="auth-field">
-              <span className="auth-icon">👤</span>
+            <label className="premium-input">
+              <span>👤</span>
               <input
                 type="text"
                 placeholder="Full Name"
@@ -130,10 +185,10 @@ export default function SignUpPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 autoComplete="name"
               />
-            </div>
+            </label>
 
-            <div className="auth-field">
-              <span className="auth-icon">✉️</span>
+            <label className="premium-input">
+              <span>✉️</span>
               <input
                 type="email"
                 placeholder="Email Address"
@@ -141,10 +196,10 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
               />
-            </div>
+            </label>
 
-            <div className="auth-field">
-              <span className="auth-icon">🔒</span>
+            <label className="premium-input">
+              <span>🔒</span>
               <input
                 type="password"
                 placeholder="Password"
@@ -152,22 +207,22 @@ export default function SignUpPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
               />
-            </div>
+            </label>
 
             {role === "DRIVER" && (
               <>
-                <div className="auth-field">
-                  <span className="auth-icon">🪪</span>
+                <label className="premium-input">
+                  <span>🪪</span>
                   <input
                     type="text"
                     placeholder="NIC Number"
                     value={nicNumber}
                     onChange={(e) => setNicNumber(e.target.value)}
                   />
-                </div>
+                </label>
 
-                <div className="auth-field">
-                  <span className="auth-icon">⚧</span>
+                <label className="premium-input">
+                  <span>⚧</span>
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value as Gender)}
@@ -176,57 +231,54 @@ export default function SignUpPage() {
                     <option value="FEMALE">Female</option>
                     <option value="OTHER">Other</option>
                   </select>
-                </div>
+                </label>
 
-                <div className="auth-field">
-                  <span className="auth-icon">📞</span>
+                <label className="premium-input">
+                  <span>📞</span>
                   <input
                     type="text"
                     placeholder="Phone Number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />
-                </div>
+                </label>
 
-                <div className="auth-field">
-                  <span className="auth-icon">🏍️</span>
+                <label className="premium-input">
+                  <span>🏍️</span>
                   <input
                     type="text"
                     placeholder="Vehicle Type"
                     value={vehicleType}
                     onChange={(e) => setVehicleType(e.target.value)}
                   />
-                </div>
+                </label>
 
-                <div className="auth-field">
-                  <span className="auth-icon">🔢</span>
+                <label className="premium-input">
+                  <span>🔢</span>
                   <input
                     type="text"
                     placeholder="Vehicle Number"
                     value={vehicleNumber}
                     onChange={(e) => setVehicleNumber(e.target.value)}
                   />
-                </div>
+                </label>
               </>
             )}
 
             <button
               type="submit"
-              className="auth-submit-btn"
+              className="premium-submit"
               disabled={submitting}
             >
               {submitting ? "Creating..." : "Create Account"}
             </button>
           </form>
 
-          <p className="auth-switch-text">
-            Already have an account?{" "}
-            <Link to="/signin" className="auth-switch-link">
-              Sign in
-            </Link>
+          <p className="premium-switch">
+            Already have an account? <Link to="/signin">Sign In</Link>
           </p>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

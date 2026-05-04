@@ -349,15 +349,7 @@ export default function HomePage() {
         </div>
 
         <footer className="steak-footer">
-          <div>
-            <h3>FoodExpress</h3>
-            <p>Online Food Ordering System</p>
-          </div>
-
-          <div>
-            <p>Customer • Driver • Owner</p>
-            <p>Frontend Coursework Project</p>
-          </div>
+          
         </footer>
       </section>
     </div>
