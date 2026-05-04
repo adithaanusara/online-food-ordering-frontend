@@ -1,25 +1,29 @@
 import { Navigate } from "react-router-dom";
-import { ReactNode } from "react";
-import { UserRole } from "../../types";
-import { useAuth } from "../../context/AuthContext";
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-  allowedRoles?: UserRole[];
-}
+type ProtectedRouteProps = {
+  children: React.ReactNode;
+  allowedRoles?: string[];
+};
 
 export default function ProtectedRoute({
   children,
-  allowedRoles,
+  allowedRoles = [],
 }: ProtectedRouteProps) {
-  const { user, isAuthenticated } = useAuth();
+  const currentUser = JSON.parse(
+    localStorage.getItem("food_ordering_current_user") || "null"
+  );
 
-  if (!isAuthenticated) {
+  if (!currentUser) {
     return <Navigate to="/signin" replace />;
   }
 
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+  if (allowedRoles.length > 0) {
+    const userRole = String(currentUser.role || "").toUpperCase();
+    const allowed = allowedRoles.map((role) => role.toUpperCase());
+
+    if (!allowed.includes(userRole)) {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   return <>{children}</>;

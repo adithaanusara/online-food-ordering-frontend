@@ -14,44 +14,60 @@ export default function SignInPage() {
 
   function goToCorrectDashboard() {
     const currentUser = JSON.parse(
-      localStorage.getItem("food_ordering_current_user") || "null",
+      localStorage.getItem("food_ordering_current_user") || "null"
     );
 
-    if (currentUser?.role === "OWNER") {
+    const role = String(currentUser?.role || "").toUpperCase();
+
+    if (role === "ADMIN") {
+      navigate("/admin/dashboard");
+    } else if (role === "OWNER") {
       navigate("/owner/dashboard");
-    } else if (currentUser?.role === "DRIVER") {
+    } else if (role === "DRIVER") {
+      navigate("/driver/dashboard");
+    } else if (role === "CUSTOMER") {
+      navigate("/customer/dashboard");
+    } else {
+      navigate("/signin");
+    }
+  }
+
+function submit(e: React.FormEvent) {
+  e.preventDefault();
+  setError("");
+
+  if (!email.trim() || !password.trim()) {
+    setError("Email and password are required.");
+    return;
+  }
+
+  try {
+    setSubmitting(true);
+
+    const loggedUser = signIn({
+      email: email.trim(),
+      password: password.trim(),
+    });
+
+    const role = String(loggedUser.role || "").toUpperCase();
+
+    if (role === "ADMIN") {
+      navigate("/admin/dashboard");
+    } else if (role === "OWNER") {
+      navigate("/owner/dashboard");
+    } else if (role === "DRIVER") {
       navigate("/driver/dashboard");
     } else {
       navigate("/customer/dashboard");
     }
+  } catch (err) {
+    setError(
+      err instanceof Error ? err.message : "Unable to sign in. Try again."
+    );
+  } finally {
+    setSubmitting(false);
   }
-
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-
-    if (!email.trim() || !password.trim()) {
-      setError("Email and password are required.");
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-
-      signIn({
-        email,
-        password,
-      });
-
-      goToCorrectDashboard();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to sign in. Try again.",
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  }
+}
 
   return (
     <div className="premium-auth-page">
@@ -182,10 +198,17 @@ export default function SignInPage() {
             <span></span>
           </div>
 
-          <div className="premium-socials">
-            <button type="button">🌐 Google</button>
-            <button type="button">🔵 Facebook</button>
-          </div>
+         <div className="premium-socials">
+  <button type="button">
+    <span className="google-logo-icon">G</span>
+    <span>Google</span>
+  </button>
+
+  <button type="button">
+    <span className="facebook-logo-icon">f</span>
+    <span>Facebook</span>
+  </button>
+</div>
 
           <p className="premium-switch">
             Don&apos;t have an account? <Link to="/signup">Sign Up</Link>

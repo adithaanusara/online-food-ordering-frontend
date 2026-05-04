@@ -25,19 +25,24 @@ import OwnerOrdersPage from "./pages/owner/OwnerOrdersPage";
 import DriversPage from "./pages/owner/DriversPage";
 import CustomersPage from "./pages/owner/CustomersPage";
 
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+import AdminDriversPage from "./pages/admin/AdminDriversPage";
+import AdminCustomersPage from "./pages/admin/AdminCustomersPage";
+
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<HomePage />} />
-
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
+        {/* Customer routes */}
         <Route
           path="/customer/dashboard"
           element={
@@ -98,6 +103,7 @@ export default function App() {
           }
         />
 
+        {/* Driver routes */}
         <Route
           path="/driver/dashboard"
           element={
@@ -134,6 +140,7 @@ export default function App() {
           }
         />
 
+        {/* Owner routes */}
         <Route
           path="/owner/dashboard"
           element={
@@ -194,6 +201,56 @@ export default function App() {
           }
         />
 
+        {/* Admin routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <>
+              <Navbar />
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <AdminDashboardPage />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
+        <Route
+          path="/admin/orders"
+          element={
+            <>
+              <Navbar />
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <AdminOrdersPage />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
+        <Route
+          path="/admin/drivers"
+          element={
+            <>
+              <Navbar />
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <AdminDriversPage />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
+        <Route
+          path="/admin/customers"
+          element={
+            <>
+              <Navbar />
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <AdminCustomersPage />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
+        {/* Fallback route must be last */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

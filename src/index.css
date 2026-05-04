@@ -7435,3 +7435,570 @@ body {
     padding: 28px;
   }
 }
+
+.google-logo-icon,
+.facebook-logo-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+  font-size: 21px;
+  flex-shrink: 0;
+}
+
+.google-logo-icon {
+  background: conic-gradient(
+    from -45deg,
+    #4285f4 0deg 90deg,
+    #34a853 90deg 180deg,
+    #fbbc05 180deg 270deg,
+    #ea4335 270deg 360deg
+  );
+  color: white;
+}
+
+.facebook-logo-icon {
+  background: #1877f2;
+  color: white;
+  font-size: 28px;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+}
+
+.premium-socials button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* =========================================================
+   ADMIN PAGES - BLACK GOLD THEME
+   ========================================================= */
+
+.fx-admin-page {
+  position: relative;
+  min-height: calc(100vh - 76px);
+  padding: 42px 32px 64px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(216, 163, 42, 0.15), transparent 24%),
+    radial-gradient(circle at 88% 20%, rgba(255, 229, 170, 0.08), transparent 20%),
+    linear-gradient(135deg, #050505 0%, #0b0b09 50%, #111008 100%);
+  overflow: hidden;
+  color: #fff2d2;
+}
+
+.fx-admin-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: fxAdminGlow 8s ease-in-out infinite;
+}
+
+.fx-admin-glow.glow-one {
+  width: 280px;
+  height: 280px;
+  left: -90px;
+  top: 120px;
+  background: rgba(216, 163, 42, 0.16);
+}
+
+.fx-admin-glow.glow-two {
+  width: 320px;
+  height: 320px;
+  right: -110px;
+  bottom: 130px;
+  background: rgba(255, 229, 170, 0.1);
+  animation-delay: -3s;
+}
+
+@keyframes fxAdminGlow {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-22px) scale(1.08);
+  }
+}
+
+.fx-admin-hero,
+.fx-admin-stats-grid,
+.fx-admin-quick-grid,
+.fx-admin-list-hero,
+.fx-admin-orders-list,
+.fx-admin-user-grid,
+.fx-admin-empty-box {
+  position: relative;
+  z-index: 2;
+  max-width: 1380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fx-admin-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 26px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 42px;
+  border-radius: 32px;
+  border: 1px solid rgba(216, 163, 42, 0.24);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.94), rgba(0, 0, 0, 0.78)),
+    radial-gradient(circle at 80% 40%, rgba(216, 163, 42, 0.16), transparent 30%);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+}
+
+.fx-admin-mini {
+  color: #d8a935;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.7px;
+}
+
+.fx-admin-hero h1,
+.fx-admin-list-hero h1 {
+  margin: 14px 0 16px;
+  color: #fff2d2;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1.05;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.fx-admin-hero h1 span {
+  color: #d8a935;
+}
+
+.fx-admin-hero p,
+.fx-admin-list-hero p {
+  max-width: 740px;
+  color: rgba(255, 244, 217, 0.76);
+  line-height: 1.8;
+  font-size: 17px;
+  margin: 0;
+}
+
+.fx-admin-hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.fx-admin-btn {
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 900;
+  transition: 0.25s ease;
+}
+
+.fx-admin-btn.primary {
+  background: linear-gradient(180deg, #f6cf69, #c99326);
+  color: #211400;
+}
+
+.fx-admin-btn.secondary {
+  color: #f5d7a1;
+  border: 1px solid rgba(216, 163, 42, 0.35);
+  background: rgba(216, 163, 42, 0.08);
+}
+
+.fx-admin-btn:hover {
+  transform: translateY(-3px);
+}
+
+.fx-admin-revenue-card {
+  padding: 28px;
+  border-radius: 28px;
+  text-align: center;
+  border: 1px solid rgba(216, 163, 42, 0.28);
+  background: rgba(216, 163, 42, 0.1);
+  animation: fxAdminFloat 4s ease-in-out infinite;
+}
+
+@keyframes fxAdminFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.fx-admin-revenue-card span {
+  font-size: 52px;
+}
+
+.fx-admin-revenue-card p {
+  margin: 12px 0 8px;
+  color: rgba(255, 244, 217, 0.72);
+}
+
+.fx-admin-revenue-card strong {
+  color: #f5d7a1;
+  font-size: 32px;
+}
+
+.fx-admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.fx-admin-stat-card,
+.fx-admin-quick-card,
+.fx-admin-order-card,
+.fx-admin-user-card,
+.fx-admin-empty-box,
+.fx-admin-list-hero {
+  border-radius: 26px;
+  border: 1px solid rgba(216, 163, 42, 0.2);
+  background:
+    radial-gradient(circle at 85% 18%, rgba(216, 163, 42, 0.08), transparent 22%),
+    rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(12px);
+}
+
+.fx-admin-stat-card {
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: 0.28s ease;
+}
+
+.fx-admin-stat-card:hover,
+.fx-admin-quick-card:hover,
+.fx-admin-order-card:hover,
+.fx-admin-user-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(216, 163, 42, 0.42);
+}
+
+.fx-admin-stat-card > span,
+.fx-admin-quick-card > span,
+.fx-admin-user-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: rgba(216, 163, 42, 0.12);
+  border: 1px solid rgba(216, 163, 42, 0.25);
+}
+
+.fx-admin-stat-card strong {
+  display: block;
+  color: #f5d7a1;
+  font-size: 30px;
+}
+
+.fx-admin-stat-card h3 {
+  margin: 2px 0;
+  color: #fff2d2;
+}
+
+.fx-admin-stat-card p {
+  margin: 0;
+  color: rgba(255, 244, 217, 0.62);
+}
+
+.fx-admin-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.fx-admin-quick-card {
+  text-decoration: none;
+  padding: 26px;
+  transition: 0.28s ease;
+}
+
+.fx-admin-quick-card h3 {
+  color: #fff2d2;
+  margin: 18px 0 10px;
+  font-size: 30px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.fx-admin-quick-card p {
+  color: rgba(255, 244, 217, 0.7);
+  line-height: 1.75;
+}
+
+.fx-admin-quick-card strong {
+  color: #d8a935;
+}
+
+.fx-admin-list-hero {
+  padding: 34px;
+  margin-bottom: 24px;
+}
+
+.fx-admin-orders-list {
+  display: grid;
+  gap: 18px;
+}
+
+.fx-admin-order-card {
+  padding: 24px;
+  transition: 0.28s ease;
+}
+
+.fx-admin-order-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid rgba(216, 163, 42, 0.14);
+  padding-bottom: 16px;
+}
+
+.fx-admin-order-head span {
+  color: #d8a935;
+  font-weight: 900;
+}
+
+.fx-admin-order-head h2 {
+  margin: 6px 0 0;
+  color: #fff2d2;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.fx-admin-status-pill {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.fx-admin-status-pill.delivered {
+  background: rgba(74, 222, 128, 0.14);
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.28);
+}
+
+.fx-admin-status-pill.progress {
+  background: rgba(216, 163, 42, 0.14);
+  color: #f5d7a1;
+  border: 1px solid rgba(216, 163, 42, 0.28);
+}
+
+.fx-admin-status-pill.pending {
+  background: rgba(255, 145, 77, 0.14);
+  color: #ffbc8a;
+  border: 1px solid rgba(255, 145, 77, 0.28);
+}
+
+.fx-admin-order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+  margin: 18px 0;
+}
+
+.fx-admin-order-info-grid p {
+  margin: 0;
+  color: rgba(255, 244, 217, 0.72);
+  line-height: 1.6;
+}
+
+.fx-admin-order-info-grid b {
+  color: #f5d7a1;
+}
+
+.fx-admin-order-items {
+  display: grid;
+  gap: 12px;
+}
+
+.fx-admin-order-item {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(216, 163, 42, 0.1);
+}
+
+.fx-admin-order-item img,
+.fx-admin-food-placeholder {
+  width: 76px;
+  height: 62px;
+  border-radius: 12px;
+}
+
+.fx-admin-order-item img {
+  object-fit: cover;
+}
+
+.fx-admin-food-placeholder {
+  background: rgba(216, 163, 42, 0.14);
+  border: 1px solid rgba(216, 163, 42, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.fx-admin-order-item h3 {
+  margin: 0 0 4px;
+  color: #fff2d2;
+}
+
+.fx-admin-order-item p {
+  margin: 0;
+  color: rgba(255, 244, 217, 0.58);
+}
+
+.fx-admin-order-item strong {
+  color: #d8a935;
+  white-space: nowrap;
+}
+
+.fx-admin-user-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.fx-admin-user-card {
+  padding: 26px;
+  transition: 0.28s ease;
+}
+
+.fx-admin-user-avatar {
+  margin-bottom: 18px;
+}
+
+.fx-admin-user-card h2 {
+  margin: 0 0 6px;
+  color: #fff2d2;
+  font-size: 28px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.fx-admin-user-card > p {
+  margin: 0 0 18px;
+  color: rgba(255, 244, 217, 0.65);
+}
+
+.fx-admin-user-info {
+  display: grid;
+  gap: 10px;
+}
+
+.fx-admin-user-info span {
+  color: rgba(255, 244, 217, 0.72);
+}
+
+.fx-admin-user-info b {
+  color: #f5d7a1;
+}
+
+.fx-admin-empty-box {
+  max-width: 620px;
+  padding: 42px;
+  text-align: center;
+}
+
+.fx-admin-empty-box > span {
+  font-size: 70px;
+}
+
+.fx-admin-empty-box h2 {
+  color: #fff2d2;
+  font-size: 36px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.fx-admin-empty-box p {
+  color: rgba(255, 244, 217, 0.72);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .fx-admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fx-admin-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .fx-admin-quick-grid,
+  .fx-admin-user-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .fx-admin-page {
+    padding: 24px 14px 42px;
+  }
+
+  .fx-admin-hero,
+  .fx-admin-list-hero {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .fx-admin-hero h1,
+  .fx-admin-list-hero h1 {
+    font-size: 40px;
+  }
+
+  .fx-admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-admin-order-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fx-admin-order-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-admin-order-item {
+    grid-template-columns: 64px 1fr;
+  }
+
+  .fx-admin-order-item img,
+  .fx-admin-food-placeholder {
+    width: 64px;
+    height: 56px;
+  }
+
+  .fx-admin-order-item strong {
+    grid-column: 2;
+  }
+}

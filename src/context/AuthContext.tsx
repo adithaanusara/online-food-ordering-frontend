@@ -1,54 +1,73 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { SignInData, SignUpData, User } from "../types";
 import { authService } from "../services/authService";
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  signUp: (data: SignUpData) => void;
-  signIn: (data: SignInData) => void;
+type AuthUser = {
+  id: string;
+  fullName?: string;
+  name?: string;
+  email: string;
+  role: "CUSTOMER" | "DRIVER" | "OWNER" | "ADMIN";
+  phone?: string;
+  nicNumber?: string;
+  nic?: string;
+  gender?: string;
+  vehicleType?: string;
+  vehicleNumber?: string;
+};
+
+type SignInData = {
+  email: string;
+  password: string;
+};
+
+type SignUpData = {
+  fullName: string;
+  email: string;
+  password: string;
+  role: "CUSTOMER" | "DRIVER";
+  phone?: string;
+  nicNumber?: string;
+  gender?: string;
+  vehicleType?: string;
+  vehicleNumber?: string;
+};
+
+type AuthContextType = {
+  user: AuthUser | null;
+  signIn: (data: SignInData) => AuthUser;
+  signUp: (data: SignUpData) => AuthUser;
   logout: () => void;
-}
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
     setUser(currentUser);
   }, []);
 
-  const signUp = (data: SignUpData) => {
-    const registeredUser = authService.signUp(data);
-    setUser(registeredUser);
-  };
-
-  const signIn = (data: SignInData) => {
-    const loggedUser = authService.signIn(data);
+  function signIn(data: SignInData) {
+    const loggedUser = authService.signIn(data) as AuthUser;
     setUser(loggedUser);
-  };
+    return loggedUser;
+  }
 
-  const logout = () => {
+  function signUp(data: SignUpData) {
+    const createdUser = authService.signUp(data) as AuthUser;
+    setUser(createdUser);
+    return createdUser;
+  }
+
+  function logout() {
     authService.logout();
     setUser(null);
-  };
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        signUp,
-        signIn,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, signIn, signUp, logout }}>
       {children}
     </AuthContext.Provider>
   );

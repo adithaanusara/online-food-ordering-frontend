@@ -22,6 +22,14 @@ export default function Navbar() {
       <Link to="/" className="app-logo">
         FoodExpress
       </Link>
+      {isLoggedIn && currentUser?.role === "ADMIN" && (
+  <>
+    <NavLink to="/admin/dashboard">Dashboard</NavLink>
+    <NavLink to="/admin/orders">Orders</NavLink>
+    <NavLink to="/admin/drivers">Drivers</NavLink>
+    <NavLink to="/admin/customers">Customers</NavLink>
+  </>
+)}
 
       <nav className="app-nav-links">
         {isLoggedIn && currentUser?.role === "CUSTOMER" && (
