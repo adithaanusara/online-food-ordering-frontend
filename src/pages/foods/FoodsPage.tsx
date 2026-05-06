@@ -1,77 +1,121 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import { getFoods } from "../../services/foodService";
-import { FoodItem } from "../../types";
+
+type Food = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  description: string;
+  image: string;
+};
+
+const foods: Food[] = [
+  {
+    id: "food-1",
+    name: "Chicken Pizza",
+    category: "Pizza",
+    price: 2200,
+    description: "Hot pizza with extra cheese and chicken toppings.",
+    image:
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-2",
+    name: "Cheese Burger",
+    category: "Burger",
+    price: 1450,
+    description: "Fresh burger with cheese, sauce, and crispy fries.",
+    image:
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-3",
+    name: "Hot Coffee",
+    category: "Coffee",
+    price: 650,
+    description: "Freshly brewed coffee with rich aroma and smooth taste.",
+    image:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-4",
+    name: "Chicken Rice & Koththu",
+    category: "Koththu",
+    price: 1800,
+    description: "Spicy rice and koththu mixed with chicken and sauces.",
+    image:
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-5",
+    name: "Creamy Pasta",
+    category: "Pasta",
+    price: 1750,
+    description: "Creamy pasta with fresh herbs and premium ingredients.",
+    image:
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&auto=format&fit=crop",
+  },
+  {
+    id: "food-6",
+    name: "Chocolate Dessert",
+    category: "Dessert",
+    price: 950,
+    description: "Sweet chocolate dessert for your premium food experience.",
+    image:
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop",
+  },
+];
+
+const categories = [
+  "All",
+  "Pizza",
+  "Burger",
+  "Coffee",
+  "Koththu",
+  "Pasta",
+  "Dessert",
+];
 
 export default function FoodsPage() {
   const { addToCart, isInCart } = useCart();
+  const [searchParams] = useSearchParams();
 
-  const [foods, setFoods] = useState<FoodItem[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchText, setSearchText] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "All"
+  );
+
+  const [searchText, setSearchText] = useState(
+    searchParams.get("search") || ""
+  );
 
   useEffect(() => {
-    let active = true;
+    setSelectedCategory(searchParams.get("category") || "All");
+    setSearchText(searchParams.get("search") || "");
+  }, [searchParams]);
 
-    async function loadFoods() {
-      try {
-        setLoading(true);
-        setError("");
+  const filteredFoods = useMemo(() => {
+    const keyword = searchText.trim().toLowerCase();
+    const selected = selectedCategory.trim().toLowerCase();
 
-        const data = await getFoods();
+    return foods.filter((food) => {
+      const foodName = food.name.toLowerCase();
+      const foodCategory = food.category.toLowerCase();
+      const foodDescription = food.description.toLowerCase();
 
-        if (active) {
-          setFoods(data);
-        }
-      } catch {
-        if (active) {
-          setError("Unable to load foods from backend.");
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    }
+      const categoryMatch =
+        selected === "all" || selected === "" || foodCategory === selected;
 
-    loadFoods();
+      const searchMatch =
+        keyword === "" ||
+        foodName.includes(keyword) ||
+        foodCategory.includes(keyword) ||
+        foodDescription.includes(keyword);
 
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const categories = useMemo(() => {
-    const names = foods
-      .map((food) => String(food.category || "Food"))
-      .filter(Boolean);
-
-    return ["All", ...Array.from(new Set(names))];
-  }, [foods]);
-
-const filteredFoods = useMemo(() => {
-  const keyword = searchText.trim().toLowerCase();
-
-  return foods.filter((food) => {
-    const foodName = String(food.name || "").toLowerCase();
-    const foodCategory = String(food.category || "").toLowerCase();
-    const foodDescription = String(food.description || "").toLowerCase();
-
-    const categoryMatch =
-      selectedCategory === "All" ||
-      foodCategory === selectedCategory.toLowerCase();
-
-    const searchMatch =
-      keyword === "" ||
-      foodName.includes(keyword) ||
-      foodCategory.includes(keyword) ||
-      foodDescription.includes(keyword);
-
-    return categoryMatch && searchMatch;
-  });
-}, [foods, selectedCategory, searchText]);
+      return categoryMatch && searchMatch;
+    });
+  }, [selectedCategory, searchText]);
 
   return (
     <main className="foods-page">
@@ -98,33 +142,34 @@ const filteredFoods = useMemo(() => {
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             {categories.map((category) => (
-              <option key={category}>{category}</option>
+              <option key={category} value={category}>
+                {category}
+              </option>
             ))}
           </select>
         </div>
       </section>
 
-      {loading && <section className="foods-grid">Loading foods...</section>}
-
-      {error && !loading && <section className="foods-grid">{error}</section>}
-
-      {!loading && !error && (
-        <section className="foods-grid">
-          {filteredFoods.map((food) => {
-            const foodId = String(food.id);
-            const added = isInCart(foodId);
-            const image = food.image || food.imageUrl || "";
-            const category = String(food.category || "Food");
+      <section className="foods-grid">
+        {filteredFoods.length === 0 ? (
+          <div className="no-food-results">
+            <h2>No foods found</h2>
+            <p>Try another keyword or category.</p>
+          </div>
+        ) : (
+          filteredFoods.map((food) => {
+            const added = isInCart(food.id);
 
             return (
-              <article className="food-card" key={foodId}>
+              <article className="food-card" key={food.id}>
                 <div className="food-card-image">
-                  <img src={image} alt={food.name} />
-                  <span>{category}</span>
+                  <img src={food.image} alt={food.name} />
+                  <span>{food.category}</span>
                 </div>
 
                 <div className="food-card-body">
                   <h3>{food.name}</h3>
+
                   <p>{food.description}</p>
 
                   <div className="food-card-bottom">
@@ -133,31 +178,26 @@ const filteredFoods = useMemo(() => {
                     <button
                       type="button"
                       className={added ? "add-cart-btn added" : "add-cart-btn"}
-                      disabled={food.available === false}
                       onClick={() =>
                         addToCart({
-                          id: foodId,
+                          id: food.id,
                           name: food.name,
                           price: food.price,
-                          image,
-                          category,
+                          image: food.image,
+                          category: food.category,
                           description: food.description,
                         })
                       }
                     >
-                      {food.available === false
-                        ? "Out of Stock"
-                        : added
-                        ? "Add More +"
-                        : "Add to Cart"}
+                      {added ? "Add More +" : "Add to Cart"}
                     </button>
                   </div>
                 </div>
               </article>
             );
-          })}
-        </section>
-      )}
+          })
+        )}
+      </section>
     </main>
   );
 }
