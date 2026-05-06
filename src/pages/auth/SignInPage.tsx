@@ -59,65 +59,65 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="premium-auth-page">
-      <div className="gold-line gold-line-one"></div>
-      <div className="gold-line gold-line-two"></div>
-      <div className="gold-dot dot-one"></div>
-      <div className="gold-dot dot-two"></div>
-      <div className="gold-dot dot-three"></div>
+    <div className="premium-auth-page">
+      <div className="premium-gold-lines">
+        <span className="gold-line gold-line-one"></span>
+        <span className="gold-line gold-line-two"></span>
+        <span className="gold-line gold-line-three"></span>
+      </div>
 
-      <section className="premium-auth-shell">
-        <aside className="premium-auth-poster">
-          <div className="poster-food-circle poster-food-one"></div>
-          <div className="poster-food-circle poster-food-two"></div>
+      <div className="premium-particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-          <div className="poster-brand">
-            <div className="poster-logo-icon">♨</div>
-            <h1>FoodExpress</h1>
-            <p>FOOD EXPERIENCE</p>
+      <section className="premium-auth-showcase premium-food-poster">
+        <Link to="/" className="premium-auth-logo premium-poster-logo">
+          <span className="chef-icon">♨</span>
+          <strong>FoodExpress</strong>
+          <small>FOOD EXPERIENCE</small>
+        </Link>
+
+        <div className="premium-poster-text">
+          <p className="poster-mini">What is your</p>
+          <h1>
+            Favorite <span>Food</span>
+          </h1>
+          <p className="poster-sub">today?</p>
+          <p className="poster-description">
+            Discover premium meals, fresh flavors and your most loved dishes in
+            one place.
+          </p>
+        </div>
+
+        <div className="poster-orbit-system">
+          <div className="poster-orbit orbit-1">
+            <div className="poster-plate poster-plate-1"></div>
           </div>
 
-          <div className="poster-main-copy">
-            <h2>
-              GOOD <span>FOOD</span>
-              <br />
-              GOOD <span>MOOD</span>
-            </h2>
-
-            <div className="poster-divider">
-              <span></span>
-              <b>🍽</b>
-              <span></span>
-            </div>
-
-            <p>
-              Discover delicious foods, quick ordering and a premium delivery
-              experience.
-            </p>
+          <div className="poster-orbit orbit-2">
+            <div className="poster-plate poster-plate-2"></div>
           </div>
 
-          <div className="poster-features">
-            <div>
-              <span>⭐</span>
-              <strong>BEST QUALITY</strong>
-              <small>Premium meals</small>
-            </div>
-
-            <div>
-              <span>🚚</span>
-              <strong>FAST DELIVERY</strong>
-              <small>Quick orders</small>
-            </div>
-
-            <div>
-              <span>🎁</span>
-              <strong>EXCLUSIVE</strong>
-              <small>Special deals</small>
-            </div>
+          <div className="poster-orbit orbit-3">
+            <div className="poster-plate poster-plate-3"></div>
           </div>
-        </aside>
 
-        <section className="premium-auth-card">
+          <div className="poster-orbit orbit-4">
+            <div className="poster-plate poster-plate-4"></div>
+          </div>
+
+          <div className="poster-orbit orbit-5">
+            <div className="poster-plate poster-plate-5"></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="premium-auth-card-wrap">
+        <div className="premium-auth-card">
           <div className="premium-tabs">
             <Link to="/signin" className="active">
               Login
@@ -126,22 +126,22 @@ export default function SignInPage() {
             <Link to="/signup">Sign Up</Link>
           </div>
 
-          <div className="premium-title-divider">
+          <div className="premium-card-divider">
             <span></span>
             <b>🍽</b>
             <span></span>
           </div>
 
-          <div className="premium-form-heading">
+          <div className="premium-card-title">
             <h2>Welcome Back!</h2>
             <p>Login to continue your food journey</p>
           </div>
 
-          {error && <div className="premium-error">{error}</div>}
+          <form onSubmit={submit} className="premium-form">
+            {error && <div className="premium-error">{error}</div>}
 
-          <form onSubmit={submit} className="premium-auth-form">
-            <label className="premium-input-wrap">
-              <span className="input-icon">👤</span>
+            <label className="premium-input">
+              <span>👤</span>
 
               <input
                 type="email"
@@ -152,8 +152,8 @@ export default function SignInPage() {
               />
             </label>
 
-            <label className="premium-input-wrap">
-              <span className="input-icon">🔒</span>
+            <label className="premium-input">
+              <span>🔒</span>
 
               <input
                 type={showPassword ? "text" : "password"}
@@ -166,27 +166,27 @@ export default function SignInPage() {
               <button
                 type="button"
                 className="password-eye-btn"
-                onClick={() => setShowPassword((value) => !value)}
-                aria-label="Toggle password visibility"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? "🙈" : "👁"}
               </button>
             </label>
 
-            <div className="premium-forgot-row">
-              <button type="button">Forgot Password?</button>
-            </div>
+            <button type="button" className="premium-forgot">
+              Forgot Password?
+            </button>
 
             <button
               type="submit"
-              className="premium-submit-btn"
+              className="premium-submit"
               disabled={submitting}
             >
-              {submitting ? "Logging in..." : "Login"}
+              {submitting ? "Signing In..." : "Login"}
             </button>
           </form>
 
-          <div className="premium-social-divider">
+          <div className="premium-or">
             <span></span>
             <p>or continue with</p>
             <span></span>
@@ -194,21 +194,21 @@ export default function SignInPage() {
 
           <div className="premium-socials">
             <button type="button" onClick={handleGoogleLogin}>
-              <span className="google-logo">G</span>
-              Google
+              <span className="google-logo-icon">G</span>
+              <span>Google</span>
             </button>
 
             <button type="button" onClick={handleFacebookLogin}>
-              <span className="facebook-logo">f</span>
-              Facebook
+              <span className="facebook-logo-icon">f</span>
+              <span>Facebook</span>
             </button>
           </div>
 
           <p className="premium-switch">
             Don&apos;t have an account? <Link to="/signup">Sign Up</Link>
           </p>
-        </section>
+        </div>
       </section>
-    </main>
+    </div>
   );
 }
