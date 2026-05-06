@@ -51,20 +51,27 @@ export default function FoodsPage() {
     return ["All", ...Array.from(new Set(names))];
   }, [foods]);
 
-  const filteredFoods = useMemo(() => {
-    return foods.filter((food) => {
-      const category = String(food.category || "Food");
+const filteredFoods = useMemo(() => {
+  const keyword = searchText.trim().toLowerCase();
 
-      const categoryMatch =
-        selectedCategory === "All" || category === selectedCategory;
+  return foods.filter((food) => {
+    const foodName = String(food.name || "").toLowerCase();
+    const foodCategory = String(food.category || "").toLowerCase();
+    const foodDescription = String(food.description || "").toLowerCase();
 
-      const searchMatch =
-        food.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        category.toLowerCase().includes(searchText.toLowerCase());
+    const categoryMatch =
+      selectedCategory === "All" ||
+      foodCategory === selectedCategory.toLowerCase();
 
-      return categoryMatch && searchMatch;
-    });
-  }, [foods, selectedCategory, searchText]);
+    const searchMatch =
+      keyword === "" ||
+      foodName.includes(keyword) ||
+      foodCategory.includes(keyword) ||
+      foodDescription.includes(keyword);
+
+    return categoryMatch && searchMatch;
+  });
+}, [foods, selectedCategory, searchText]);
 
   return (
     <main className="foods-page">

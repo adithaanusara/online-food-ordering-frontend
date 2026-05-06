@@ -1,3 +1,40 @@
-import { FoodItem } from '../../types';
-import { useCart } from '../../context/CartContext';
-export default function FoodCard({food}:{food:FoodItem}){ const {addToCart}=useCart(); return <div className="card overflow-hidden p-0"><img src={food.imageUrl} alt={food.name} className="h-44 w-full object-cover"/><div className="p-5"><h3 className="text-lg font-bold">{food.name}</h3><p className="text-slate-600 text-sm mt-1">{food.description}</p><div className="mt-4 flex items-center justify-between"><span className="font-bold text-orange-600">LKR {food.price.toFixed(2)}</span><button disabled={!food.available} onClick={()=>addToCart(food)} className="btn">Add</button></div></div></div> }
+import { FoodItem } from "../../types";
+
+type FoodCardProps = {
+  food: FoodItem;
+  addToCart: (food: FoodItem) => void;
+};
+
+export default function FoodCard({ food, addToCart }: FoodCardProps) {
+  const image = food.image || food.imageUrl || "";
+  const category = String(food.category || "Food");
+  const available = food.available !== false;
+
+  return (
+    <article className="food-card">
+      <div className="food-card-image">
+        <img src={image} alt={food.name} />
+        <span>{category}</span>
+      </div>
+
+      <div className="food-card-body">
+        <h3>{food.name}</h3>
+
+        <p>{food.description}</p>
+
+        <div className="food-card-bottom">
+          <strong>LKR {food.price.toLocaleString()}</strong>
+
+          <button
+            type="button"
+            className="add-cart-btn"
+            disabled={!available}
+            onClick={() => addToCart(food)}
+          >
+            {available ? "Add to Cart" : "Out of Stock"}
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
