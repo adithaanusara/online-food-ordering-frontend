@@ -33,7 +33,7 @@ export default function SignUpPage() {
       return;
     }
 
-    if (password.length < 6) {
+    if (password.trim().length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
@@ -69,6 +69,10 @@ export default function SignUpPage() {
 
       if (userRole === "DRIVER") {
         navigate("/driver/dashboard");
+      } else if (userRole === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else if (userRole === "OWNER") {
+        navigate("/owner/dashboard");
       } else {
         navigate("/customer/dashboard");
       }
@@ -79,76 +83,74 @@ export default function SignUpPage() {
     }
   }
 
-  function handleGoogleLogin() {
+  function handleGoogleSignup() {
     setError("Google signup is not connected for this local project demo.");
   }
 
-  function handleFacebookLogin() {
+  function handleFacebookSignup() {
     setError("Facebook signup is not connected for this local project demo.");
   }
 
   return (
-    <main className="premium-auth-page">
-      <div className="gold-line gold-line-one"></div>
-      <div className="gold-line gold-line-two"></div>
-      <div className="gold-dot dot-one"></div>
-      <div className="gold-dot dot-two"></div>
-      <div className="gold-dot dot-three"></div>
+    <div className="premium-auth-page">
+      <div className="premium-gold-lines">
+        <span className="gold-line gold-line-one"></span>
+        <span className="gold-line gold-line-two"></span>
+        <span className="gold-line gold-line-three"></span>
+      </div>
 
-      <section className="premium-auth-shell">
-        <aside className="premium-auth-poster signup-poster">
-          <div className="poster-food-circle poster-food-one"></div>
-          <div className="poster-food-circle poster-food-two"></div>
+      <div className="premium-particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-          <div className="poster-brand">
-            <div className="poster-logo-icon">♨</div>
-            <h1>FoodExpress</h1>
-            <p>FOOD EXPERIENCE</p>
+      <section className="premium-auth-showcase premium-food-poster">
+        <Link to="/" className="premium-auth-logo premium-poster-logo">
+          <span className="chef-icon">♨</span>
+          <strong>FoodExpress</strong>
+          <small>FOOD EXPERIENCE</small>
+        </Link>
+
+        <div className="premium-poster-text">
+          <p className="poster-mini">Create your</p>
+          <h1>
+            Favorite <span>Food</span>
+          </h1>
+          <p className="poster-sub">account today</p>
+          <p className="poster-description">
+            Sign up now and enjoy premium meals, quick ordering and a stylish
+            FoodExpress experience.
+          </p>
+        </div>
+
+        <div className="poster-orbit-system">
+          <div className="poster-orbit orbit-1">
+            <div className="poster-plate poster-plate-1"></div>
           </div>
 
-          <div className="poster-main-copy signup-copy">
-            <h2>
-              JOIN <span>FOOD</span>
-              <br />
-              START
-              <br />
-              <span>ORDERING</span>
-            </h2>
-
-            <div className="poster-divider">
-              <span></span>
-              <b>🍽</b>
-              <span></span>
-            </div>
-
-            <p>
-              Create your account as a customer or driver and enjoy a premium
-              FoodExpress experience.
-            </p>
+          <div className="poster-orbit orbit-2">
+            <div className="poster-plate poster-plate-2"></div>
           </div>
 
-          <div className="poster-features">
-            <div>
-              <span>👤</span>
-              <strong>CUSTOMER</strong>
-              <small>Browse foods and place orders</small>
-            </div>
-
-            <div>
-              <span>🚚</span>
-              <strong>DRIVER</strong>
-              <small>View assigned deliveries</small>
-            </div>
-
-            <div>
-              <span>🏪</span>
-              <strong>OWNER</strong>
-              <small>Manage food and orders</small>
-            </div>
+          <div className="poster-orbit orbit-3">
+            <div className="poster-plate poster-plate-3"></div>
           </div>
-        </aside>
 
-        <section className="premium-auth-card">
+          <div className="poster-orbit orbit-4">
+            <div className="poster-plate poster-plate-4"></div>
+          </div>
+
+          <div className="poster-orbit orbit-5">
+            <div className="poster-plate poster-plate-5"></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="premium-auth-card-wrap">
+        <div className="premium-auth-card">
           <div className="premium-tabs">
             <Link to="/signin">Login</Link>
 
@@ -157,18 +159,16 @@ export default function SignUpPage() {
             </Link>
           </div>
 
-          <div className="premium-title-divider">
+          <div className="premium-card-divider">
             <span></span>
             <b>🍽</b>
             <span></span>
           </div>
 
-          <div className="premium-form-heading">
+          <div className="premium-card-title">
             <h2>Create Account</h2>
             <p>Join us and start your food journey</p>
           </div>
-
-          {error && <div className="premium-error">{error}</div>}
 
           <div className="premium-role-toggle">
             <button
@@ -188,9 +188,11 @@ export default function SignUpPage() {
             </button>
           </div>
 
-          <form onSubmit={submit} className="premium-auth-form">
-            <label className="premium-input-wrap">
-              <span className="input-icon">👤</span>
+          <form onSubmit={submit} className="premium-form">
+            {error && <div className="premium-error">{error}</div>}
+
+            <label className="premium-input">
+              <span>👤</span>
 
               <input
                 type="text"
@@ -201,8 +203,8 @@ export default function SignUpPage() {
               />
             </label>
 
-            <label className="premium-input-wrap">
-              <span className="input-icon">✉️</span>
+            <label className="premium-input">
+              <span>✉️</span>
 
               <input
                 type="email"
@@ -213,8 +215,8 @@ export default function SignUpPage() {
               />
             </label>
 
-            <label className="premium-input-wrap">
-              <span className="input-icon">🔒</span>
+            <label className="premium-input">
+              <span>🔒</span>
 
               <input
                 type={showPassword ? "text" : "password"}
@@ -227,8 +229,8 @@ export default function SignUpPage() {
               <button
                 type="button"
                 className="password-eye-btn"
-                onClick={() => setShowPassword((value) => !value)}
-                aria-label="Toggle password visibility"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? "🙈" : "👁"}
               </button>
@@ -236,8 +238,8 @@ export default function SignUpPage() {
 
             {role === "DRIVER" && (
               <div className="driver-fields">
-                <label className="premium-input-wrap">
-                  <span className="input-icon">🪪</span>
+                <label className="premium-input">
+                  <span>🪪</span>
 
                   <input
                     type="text"
@@ -247,17 +249,20 @@ export default function SignUpPage() {
                   />
                 </label>
 
-                <label className="premium-input-wrap">
-                  <span className="input-icon">⚥</span>
+                <label className="premium-input">
+                  <span>⚥</span>
 
-                  <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
                   </select>
                 </label>
 
-                <label className="premium-input-wrap">
-                  <span className="input-icon">📞</span>
+                <label className="premium-input">
+                  <span>📞</span>
 
                   <input
                     type="tel"
@@ -267,8 +272,8 @@ export default function SignUpPage() {
                   />
                 </label>
 
-                <label className="premium-input-wrap">
-                  <span className="input-icon">🏍</span>
+                <label className="premium-input">
+                  <span>🏍</span>
 
                   <input
                     type="text"
@@ -278,8 +283,8 @@ export default function SignUpPage() {
                   />
                 </label>
 
-                <label className="premium-input-wrap">
-                  <span className="input-icon">🔢</span>
+                <label className="premium-input">
+                  <span>🔢</span>
 
                   <input
                     type="text"
@@ -293,36 +298,36 @@ export default function SignUpPage() {
 
             <button
               type="submit"
-              className="premium-submit-btn"
+              className="premium-submit"
               disabled={submitting}
             >
               {submitting ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
-          <div className="premium-social-divider">
+          <div className="premium-or">
             <span></span>
             <p>or continue with</p>
             <span></span>
           </div>
 
           <div className="premium-socials">
-            <button type="button" onClick={handleGoogleLogin}>
-              <span className="google-logo">G</span>
-              Google
+            <button type="button" onClick={handleGoogleSignup}>
+              <span className="google-logo-icon">G</span>
+              <span>Google</span>
             </button>
 
-            <button type="button" onClick={handleFacebookLogin}>
-              <span className="facebook-logo">f</span>
-              Facebook
+            <button type="button" onClick={handleFacebookSignup}>
+              <span className="facebook-logo-icon">f</span>
+              <span>Facebook</span>
             </button>
           </div>
 
           <p className="premium-switch">
             Already have an account? <Link to="/signin">Sign In</Link>
           </p>
-        </section>
+        </div>
       </section>
-    </main>
+    </div>
   );
 }
