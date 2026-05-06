@@ -1,36 +1,18 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-type OrderItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-};
-
-type Order = {
-  id: string;
-  items: OrderItem[];
-  deliveryAddress?: string;
-  address?: string;
-  phoneNumber?: string;
-  paymentMethod: string;
-  total?: number;
-  status: string;
-  createdAt: string;
-};
+import { getMyOrders } from "../../services/orderService";
+import { Order } from "../../types";
 
 function getOrderTotal(order: Order) {
-  if (typeof order.total === "number") {
-    return order.total;
-  }
+  if (typeof order.total === "number") return order.total;
+  if (typeof order.totalAmount === "number") return order.totalAmount;
 
-  return order.items.reduce((total, item) => {
-    return total + item.price * item.quantity;
+  return (order.items || []).reduce((total: number, item: any) => {
+    return total + Number(item.price || 0) * Number(item.quantity || 0);
   }, 0);
 }
 
-function formatDate(dateValue: string) {
+function formatDate(dateValue?: string) {
   if (!dateValue) return "N/A";
 
   const date = new Date(dateValue);
@@ -43,29 +25,62 @@ function formatDate(dateValue: string) {
 }
 
 export default function OrdersPage() {
-  /*
-    foodexpress_orders = new checkout page key
-    food_orders = old key from your previous code
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    මේ දෙකම read කරනවා.
-    එතකොට old orders තිබ්බත් show වෙනවා.
-  */
-  const newOrders: Order[] = JSON.parse(
-    localStorage.getItem("foodexpress_orders") || "[]"
-  );
+  useEffect(() => {
+    let active = true;
 
-  const oldOrders: Order[] = JSON.parse(
-    localStorage.getItem("food_orders") || "[]"
-  );
+    async function loadOrders() {
+      try {
+        const backendOrders = await getMyOrders();
 
-  const orders = [...newOrders, ...oldOrders];
+        const localOrders: Order[] = JSON.parse(
+          localStorage.getItem("foodexpress_orders") || "[]"
+        );
+
+        const merged = [...backendOrders, ...localOrders];
+
+        const unique = Array.from(
+          new Map(merged.map((order) => [String(order.id), order])).values()
+        );
+
+        if (active) {
+          setOrders(unique);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadOrders();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="fx-orders-page">
+        <section className="fx-empty-orders">
+          <span>⏳</span>
+          <h1>Loading orders...</h1>
+        </section>
+      </main>
+    );
+  }
 
   if (orders.length === 0) {
     return (
       <main className="fx-orders-page">
         <section className="fx-empty-orders">
           <span>📦</span>
+
           <h1>No orders yet</h1>
+
           <p>
             You have not placed any orders yet. Browse foods and place your first
             order.
@@ -83,7 +98,9 @@ export default function OrdersPage() {
     <main className="fx-orders-page">
       <section className="fx-orders-hero">
         <span className="fx-checkout-mini">Order Tracking</span>
+
         <h1>My Orders</h1>
+
         <p>Track your placed orders and view your order history.</p>
       </section>
 
@@ -96,7 +113,7 @@ export default function OrdersPage() {
             <article className="fx-order-card" key={order.id}>
               <div className="fx-order-card-header">
                 <div>
-                  <span>{order.id}</span>
+                  <span>ORD-{order.id}</span>
                   <h2>{order.status || "Pending"}</h2>
                 </div>
 
@@ -122,8 +139,8 @@ export default function OrdersPage() {
               </div>
 
               <div className="fx-order-items">
-                {order.items.map((item) => (
-                  <div className="fx-order-item" key={item.id}>
+                {(order.items || []).map((item: any) => (
+                  <div className="fx-order-item" key={`${order.id}-${item.id}`}>
                     {item.image ? (
                       <img src={item.image} alt={item.name} />
                     ) : (
@@ -132,14 +149,18 @@ export default function OrdersPage() {
 
                     <div>
                       <h3>{item.name}</h3>
+
                       <p>
                         Qty {item.quantity} × LKR{" "}
-                        {item.price.toLocaleString()}
+                        {Number(item.price || 0).toLocaleString()}
                       </p>
                     </div>
 
                     <strong>
-                      LKR {(item.price * item.quantity).toLocaleString()}
+                      LKR{" "}
+                      {(
+                        Number(item.price || 0) * Number(item.quantity || 0)
+                      ).toLocaleString()}
                     </strong>
                   </div>
                 ))}

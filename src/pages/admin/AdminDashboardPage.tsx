@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
       <div className="fx-admin-glow glow-two"></div>
 
       <section className="fx-admin-hero">
-        <div>
+        <div className="fx-admin-hero-content">
           <span className="fx-admin-mini">Admin Control Panel</span>
 
           <h1>
@@ -85,8 +85,8 @@ export default function AdminDashboardPage() {
           </h1>
 
           <p>
-            Manage customer orders, monitor driver delivery status, view drivers
-            and customers from one admin panel.
+            Manage orders, watch delivery progress, monitor drivers and customers,
+            and control the full FoodExpress platform from one place.
           </p>
 
           <div className="fx-admin-hero-actions">
@@ -97,13 +97,40 @@ export default function AdminDashboardPage() {
             <Link to="/admin/drivers" className="fx-admin-btn secondary">
               View Drivers
             </Link>
+
+            <Link to="/admin/customers" className="fx-admin-btn secondary">
+              View Customers
+            </Link>
           </div>
         </div>
 
-        <div className="fx-admin-revenue-card">
-          <span>💰</span>
-          <p>Total Revenue</p>
-          <strong>LKR {totalRevenue.toLocaleString()}</strong>
+        <div className="fx-admin-hero-side">
+          <div className="fx-admin-revenue-card">
+            <span>💰</span>
+            <p>Total Revenue</p>
+            <strong>LKR {totalRevenue.toLocaleString()}</strong>
+            <small>Based on all saved customer orders</small>
+          </div>
+
+          <div className="fx-admin-live-card">
+            <div className="fx-admin-live-dot"></div>
+            <h3>System Overview</h3>
+
+            <div className="fx-admin-live-list">
+              <div>
+                <span>Orders</span>
+                <strong>{orders.length}</strong>
+              </div>
+              <div>
+                <span>Drivers</span>
+                <strong>{drivers.length}</strong>
+              </div>
+              <div>
+                <span>Customers</span>
+                <strong>{customers.length}</strong>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -158,21 +185,21 @@ export default function AdminDashboardPage() {
         <Link to="/admin/orders" className="fx-admin-quick-card">
           <span>📦</span>
           <h3>All Orders</h3>
-          <p>Check whether each order is delivered or not delivered.</p>
+          <p>Check whether each order is delivered, pending, or in progress.</p>
           <strong>Open Orders →</strong>
         </Link>
 
         <Link to="/admin/drivers" className="fx-admin-quick-card">
           <span>🏍️</span>
           <h3>Drivers</h3>
-          <p>View driver NIC, phone, vehicle and registration details.</p>
+          <p>View driver NIC, phone, vehicle, and registration details.</p>
           <strong>Open Drivers →</strong>
         </Link>
 
         <Link to="/admin/customers" className="fx-admin-quick-card">
           <span>👥</span>
           <h3>Customers</h3>
-          <p>View all registered customer accounts.</p>
+          <p>View all registered customer accounts in the platform.</p>
           <strong>Open Customers →</strong>
         </Link>
       </section>

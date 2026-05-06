@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { placeBackendOrder } from "../../services/orderService";
 
 type PaymentMethod = "Cash on Delivery" | "Card Payment" | "Bank Transfer";
 
@@ -23,7 +24,7 @@ export default function CheckoutPage() {
     return cartTotal + deliveryFee + serviceFee;
   }, [cartTotal, deliveryFee, serviceFee]);
 
-  function placeOrder(e: React.FormEvent) {
+  async function placeOrder(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
@@ -45,16 +46,23 @@ export default function CheckoutPage() {
     try {
       setPlacingOrder(true);
 
+      const backendOrder = await placeBackendOrder(
+        cartItems,
+        deliveryAddress.trim(),
+        paymentMethod
+      );
+
       const newOrder = {
-        id: `ORD-${Date.now()}`,
-        items: cartItems,
+        ...backendOrder,
+        id: backendOrder.id || `ORD-${Date.now()}`,
+        items: backendOrder.items?.length ? backendOrder.items : cartItems,
         deliveryAddress,
         phoneNumber,
         paymentMethod,
         note,
-        total: grandTotal,
-        status: "Pending",
-        createdAt: new Date().toISOString(),
+        total: backendOrder.total || backendOrder.totalAmount || grandTotal,
+        status: backendOrder.status || "PLACED",
+        createdAt: backendOrder.createdAt || new Date().toISOString(),
       };
 
       const existingOrders = JSON.parse(
@@ -71,8 +79,14 @@ export default function CheckoutPage() {
       setTimeout(() => {
         navigate("/orders");
       }, 650);
-    } catch {
-      setError("Unable to place order. Please try again.");
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          err?.response?.data ||
+          err?.message ||
+          "Unable to place order. Please try again."
+      );
+
       setPlacingOrder(false);
     }
   }
@@ -82,7 +96,9 @@ export default function CheckoutPage() {
       <main className="fx-checkout-page">
         <section className="fx-empty-checkout">
           <div className="fx-empty-icon">🛒</div>
+
           <h1>Your cart is empty</h1>
+
           <p>
             Add your favorite foods to the cart before continuing to checkout.
           </p>
@@ -103,7 +119,9 @@ export default function CheckoutPage() {
       <section className="fx-checkout-hero">
         <div>
           <span className="fx-checkout-mini">Secure Checkout</span>
+
           <h1>Complete Your Order</h1>
+
           <p>
             Confirm your delivery address, choose payment method and place your
             FoodExpress order.
@@ -121,6 +139,7 @@ export default function CheckoutPage() {
         <form className="fx-checkout-form-card" onSubmit={placeOrder}>
           <div className="fx-form-card-header">
             <span>🚚</span>
+
             <div>
               <h2>Delivery Details</h2>
               <p>Enter accurate details for fast delivery.</p>
@@ -200,6 +219,7 @@ export default function CheckoutPage() {
         <aside className="fx-order-summary-card">
           <div className="fx-summary-header">
             <span>🍔</span>
+
             <div>
               <h2>Order Summary</h2>
               <p>Review your food items.</p>
@@ -213,6 +233,7 @@ export default function CheckoutPage() {
 
                 <div>
                   <h3>{item.name}</h3>
+
                   <p>
                     Qty {item.quantity} × LKR {item.price.toLocaleString()}
                   </p>

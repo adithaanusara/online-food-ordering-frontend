@@ -34,8 +34,8 @@ type SignUpData = {
 
 type AuthContextType = {
   user: AuthUser | null;
-  signIn: (data: SignInData) => AuthUser;
-  signUp: (data: SignUpData) => AuthUser;
+  signIn: (data: SignInData) => Promise<AuthUser>;
+  signUp: (data: SignUpData) => Promise<AuthUser>;
   logout: () => void;
 };
 
@@ -45,18 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = authService.getCurrentUser() as AuthUser | null;
     setUser(currentUser);
   }, []);
 
-  function signIn(data: SignInData) {
-    const loggedUser = authService.signIn(data) as AuthUser;
+  async function signIn(data: SignInData) {
+    const loggedUser = (await authService.signIn(data)) as AuthUser;
     setUser(loggedUser);
     return loggedUser;
   }
 
-  function signUp(data: SignUpData) {
-    const createdUser = authService.signUp(data) as AuthUser;
+  async function signUp(data: SignUpData) {
+    const createdUser = (await authService.signUp(data)) as AuthUser;
     setUser(createdUser);
     return createdUser;
   }
