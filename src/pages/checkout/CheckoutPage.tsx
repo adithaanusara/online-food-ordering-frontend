@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import { placeBackendOrder } from "../../services/orderService";
+
 
 type PaymentMethod = "Cash on Delivery" | "Card Payment" | "Bank Transfer";
 
@@ -25,72 +25,60 @@ export default function CheckoutPage() {
   }, [cartTotal, deliveryFee, serviceFee]);
 
   async function placeOrder(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    if (cartItems.length === 0) {
-      setError("Your cart is empty. Please add food items first.");
-      return;
-    }
-
-    if (!deliveryAddress.trim()) {
-      setError("Delivery address is required.");
-      return;
-    }
-
-    if (!phoneNumber.trim()) {
-      setError("Phone number is required.");
-      return;
-    }
-
-    try {
-      setPlacingOrder(true);
-
-      const backendOrder = await placeBackendOrder(
-        cartItems,
-        deliveryAddress.trim(),
-        paymentMethod
-      );
-
-      const newOrder = {
-        ...backendOrder,
-        id: backendOrder.id || `ORD-${Date.now()}`,
-        items: backendOrder.items?.length ? backendOrder.items : cartItems,
-        deliveryAddress,
-        phoneNumber,
-        paymentMethod,
-        note,
-        total: backendOrder.total || backendOrder.totalAmount || grandTotal,
-        status: backendOrder.status || "PLACED",
-        createdAt: backendOrder.createdAt || new Date().toISOString(),
-      };
-
-      const existingOrders = JSON.parse(
-        localStorage.getItem("foodexpress_orders") || "[]"
-      );
-
-      localStorage.setItem(
-        "foodexpress_orders",
-        JSON.stringify([newOrder, ...existingOrders])
-      );
-
-      clearCart();
-
-      setTimeout(() => {
-        navigate("/orders");
-      }, 650);
-    } catch (err: any) {
-      setError(
-        err?.response?.data?.message ||
-          err?.response?.data ||
-          err?.message ||
-          "Unable to place order. Please try again."
-      );
-
-      setPlacingOrder(false);
-    }
+  if (cartItems.length === 0) {
+    setError("Your cart is empty. Please add food items first.");
+    return;
   }
 
+  if (!deliveryAddress.trim()) {
+    setError("Delivery address is required.");
+    return;
+  }
+
+  if (!phoneNumber.trim()) {
+    setError("Phone number is required.");
+    return;
+  }
+
+  try {
+    setPlacingOrder(true);
+
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      items: cartItems,
+      deliveryAddress: deliveryAddress.trim(),
+      address: deliveryAddress.trim(),
+      phoneNumber: phoneNumber.trim(),
+      paymentMethod,
+      note: note.trim(),
+      total: grandTotal,
+      totalAmount: grandTotal,
+      status: "PLACED",
+      createdAt: new Date().toISOString(),
+    };
+
+    const existingOrders = JSON.parse(
+      localStorage.getItem("foodexpress_orders") || "[]"
+    );
+
+    localStorage.setItem(
+      "foodexpress_orders",
+      JSON.stringify([newOrder, ...existingOrders])
+    );
+
+    clearCart();
+
+    setTimeout(() => {
+      navigate("/orders");
+    }, 650);
+  } catch {
+    setError("Unable to place order. Please try again.");
+    setPlacingOrder(false);
+  }
+}
   if (cartItems.length === 0) {
     return (
       <main className="fx-checkout-page">
