@@ -8002,3 +8002,82 @@ body {
     grid-column: 2;
   }
 }
+
+/* ================================
+   Sign Up Role Toggle Buttons
+================================ */
+
+.premium-role-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 22px 0 18px;
+  padding: 6px;
+  border-radius: 18px;
+  background: rgba(18, 15, 10, 0.06);
+  border: 1px solid rgba(197, 139, 28, 0.22);
+}
+
+.premium-role-toggle button {
+  height: 48px;
+  border: 1px solid rgba(197, 139, 28, 0.28);
+  border-radius: 15px;
+  background: #fffdf8;
+  color: #756957;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+.premium-role-toggle button:hover {
+  color: #21170b;
+  border-color: rgba(197, 139, 28, 0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(197, 139, 28, 0.16);
+}
+
+.premium-role-toggle button.active {
+  color: #1c1307;
+  border-color: rgba(197, 139, 28, 0.95);
+  background: linear-gradient(135deg, #f8d56a 0%, #d69b22 55%, #b87913 100%);
+  box-shadow:
+    0 16px 34px rgba(198, 137, 25, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.driver-fields {
+  display: grid;
+  gap: 16px;
+  animation: driverFieldsIn 0.35s ease both;
+}
+
+@keyframes driverFieldsIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .premium-role-toggle {
+    gap: 10px;
+    margin: 18px 0 16px;
+    padding: 5px;
+    border-radius: 16px;
+  }
+
+  .premium-role-toggle button {
+    height: 50px;
+    font-size: 16px;
+    border-radius: 13px;
+  }
+}
