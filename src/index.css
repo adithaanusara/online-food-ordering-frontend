@@ -8082,3 +8082,98 @@ body {
     border-radius: 13px;
   }
 }
+
+/* Dynamic category dashboard hero */
+
+.dynamic-category-hero {
+  animation: categoryHeroIn 0.65s ease both;
+}
+
+.category-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.72) 42%,
+      rgba(0, 0, 0, 0.48) 100%
+    ),
+    var(--category-bg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+  z-index: 0;
+  transform: scale(1.04);
+  animation: categoryBgZoom 9s ease-in-out infinite alternate;
+}
+
+.dynamic-category-hero .hero-dark-overlay,
+.dynamic-category-hero .hero-content,
+.dynamic-category-hero .hero-video-showcase,
+.dynamic-category-hero .hero-orbit-foods {
+  position: relative;
+  z-index: 2;
+}
+
+.dynamic-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0 24px;
+}
+
+.dynamic-hero-badges span {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(230, 178, 62, 0.32);
+  background: rgba(255, 211, 107, 0.08);
+  color: #f8df9a;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
+  animation: categoryBadgeIn 0.45s ease both;
+}
+
+.dynamic-hero-badges span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.dynamic-hero-badges span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes categoryHeroIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes categoryBgZoom {
+  from {
+    transform: scale(1.02) translateX(0);
+  }
+
+  to {
+    transform: scale(1.1) translateX(-18px);
+  }
+}
+
+@keyframes categoryBadgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

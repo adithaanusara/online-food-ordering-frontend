@@ -1,6 +1,141 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FoodLoopCarousel from "../../components/customer/FoodLoopCarousel";
+
+type DashboardCategory =
+  | "Pizza"
+  | "Burger"
+  | "Coffee"
+  | "Koththu"
+  | "Pasta"
+  | "Dessert"
+  | "Chicken"
+  | "Shakes"
+  | "Sandwiches"
+  | "Broast";
+
+type DashboardTheme = {
+  mini: string;
+  title: string;
+  description: string;
+  badgeOne: string;
+  badgeTwo: string;
+  badgeThree: string;
+  bgImage: string;
+};
+
+const dashboardThemes: Record<DashboardCategory, DashboardTheme> = {
+  Pizza: {
+    mini: "Premium Pizza Ordering",
+    title: "Hot Cheesy Pizza Any Time",
+    description:
+      "Explore cheesy pizzas, crispy crusts and premium toppings made fresh for your cravings.",
+    badgeOne: "Cheesy",
+    badgeTwo: "Oven Fresh",
+    badgeThree: "Best Seller",
+    bgImage:
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&auto=format&fit=crop",
+  },
+  Burger: {
+    mini: "Premium Burger Ordering",
+    title: "Juicy Burgers Made Fresh",
+    description:
+      "Order grilled burgers with melted cheese, crispy fries and special FoodExpress sauces.",
+    badgeOne: "Juicy",
+    badgeTwo: "Grilled",
+    badgeThree: "Combo",
+    bgImage:
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1600&auto=format&fit=crop",
+  },
+  Coffee: {
+    mini: "Premium Coffee Bar",
+    title: "Relax With Fresh Coffee",
+    description:
+      "Enjoy cappuccino, espresso and creamy coffee drinks with a warm café experience.",
+    badgeOne: "Fresh Brew",
+    badgeTwo: "Aroma",
+    badgeThree: "Cafe Mood",
+    bgImage:
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1600&auto=format&fit=crop",
+  },
+  Koththu: {
+    mini: "Sri Lankan Koththu Corner",
+    title: "Hot Spicy Koththu Time",
+    description:
+      "Taste spicy koththu mixed with chicken, egg, vegetables and signature sauces.",
+    badgeOne: "Spicy",
+    badgeTwo: "Hot Plate",
+    badgeThree: "Local Taste",
+    bgImage:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&auto=format&fit=crop",
+  },
+  Pasta: {
+    mini: "Premium Pasta Ordering",
+    title: "Creamy Pasta Bowls",
+    description:
+      "Enjoy creamy, cheesy and spicy pasta dishes prepared with premium ingredients.",
+    badgeOne: "Creamy",
+    badgeTwo: "Italian",
+    badgeThree: "Premium",
+    bgImage:
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=1600&auto=format&fit=crop",
+  },
+  Dessert: {
+    mini: "Sweet Dessert Studio",
+    title: "Delightful Sweet Moments",
+    description:
+      "Order cakes, ice cream and sweet desserts to complete your meal perfectly.",
+    badgeOne: "Sweet",
+    badgeTwo: "Creamy",
+    badgeThree: "Treat",
+    bgImage:
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=1600&auto=format&fit=crop",
+  },
+  Chicken: {
+    mini: "Premium Chicken Meals",
+    title: "Crispy Chicken Favorites",
+    description:
+      "Enjoy crispy chicken, grilled chicken and delicious chicken meals made fresh.",
+    badgeOne: "Crispy",
+    badgeTwo: "Hot",
+    badgeThree: "Fresh",
+    bgImage:
+      "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=1600&auto=format&fit=crop",
+  },
+  Shakes: {
+    mini: "Fresh Shake Bar",
+    title: "Creamy Shakes Anytime",
+    description:
+      "Enjoy cold milkshakes with chocolate, vanilla and fruity premium flavors.",
+    badgeOne: "Cold",
+    badgeTwo: "Creamy",
+    badgeThree: "Fresh",
+    bgImage:
+      "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=1600&auto=format&fit=crop",
+  },
+  Sandwiches: {
+    mini: "Fresh Sandwich Corner",
+    title: "Fresh Sandwich Bites",
+    description:
+      "Order tasty sandwiches packed with fresh vegetables, sauces and premium fillings.",
+    badgeOne: "Fresh",
+    badgeTwo: "Quick",
+    badgeThree: "Healthy",
+    bgImage:
+      "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=1600&auto=format&fit=crop",
+  },
+  Broast: {
+    mini: "Crispy Broast Meals",
+    title: "Golden Broast Chicken",
+    description:
+      "Enjoy crispy golden broast meals with sauces, fries and premium taste.",
+    badgeOne: "Crispy",
+    badgeTwo: "Golden",
+    badgeThree: "Hot",
+    bgImage:
+      "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=1600&auto=format&fit=crop",
+  },
+};
 
 export default function CustomerDashboardPage() {
   const navigate = useNavigate();
@@ -8,7 +143,10 @@ export default function CustomerDashboardPage() {
   const customerName = "aditha anusara";
 
   const [searchText, setSearchText] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] =
+    useState<DashboardCategory>("Pizza");
+
+  const activeTheme = dashboardThemes[selectedCategory];
 
   function handleFoodSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -28,56 +166,59 @@ export default function CustomerDashboardPage() {
     navigate(query ? `/foods?${query}` : "/foods");
   }
 
-  const categories = [
-    {
-      name: "Pizza",
-      count: "14 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Broast",
-      count: "8 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Chicken",
-      count: "12 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Burger",
-      count: "19 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Shakes",
-      count: "10 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Sandwiches",
-      count: "9 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Pasta",
-      count: "16 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=700&auto=format&fit=crop",
-    },
-    {
-      name: "Dessert",
-      count: "15 Food Items",
-      image:
-        "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=700&auto=format&fit=crop",
-    },
-  ];
+  const categories = useMemo(
+    () => [
+      {
+        name: "Pizza",
+        count: "14 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Broast",
+        count: "8 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Chicken",
+        count: "12 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Burger",
+        count: "19 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Coffee",
+        count: "9 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Koththu",
+        count: "11 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Pasta",
+        count: "16 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=700&auto=format&fit=crop",
+      },
+      {
+        name: "Dessert",
+        count: "15 Food Items",
+        image:
+          "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=700&auto=format&fit=crop",
+      },
+    ],
+    []
+  );
 
   const featuredFoods = [
     {
@@ -133,22 +274,38 @@ export default function CustomerDashboardPage() {
       <div className="food-template-bg-glow glow-two"></div>
 
       <div className="food-template-container">
-        <section className="food-template-hero">
+        <section
+          key={selectedCategory}
+          className="food-template-hero dynamic-category-hero"
+          style={
+            {
+              "--category-bg": `url(${activeTheme.bgImage})`,
+            } as React.CSSProperties
+          }
+        >
           <div className="hero-dark-overlay"></div>
 
+          <div className="category-hero-bg"></div>
+
           <div className="hero-content">
-            <span className="hero-mini-label">Premium Food Ordering</span>
+            <span className="hero-mini-label">{activeTheme.mini}</span>
 
             <h1>
-              Order Healthy and Fresh <br />
-              Food Any Time
+              {activeTheme.title.split(" ").slice(0, 3).join(" ")}
+              <br />
+              {activeTheme.title.split(" ").slice(3).join(" ")}
             </h1>
 
             <p>
-              Welcome, <strong>{customerName}</strong>. Browse delicious foods,
-              add items to your cart and track your orders with a premium
-              FoodExpress experience.
+              Welcome, <strong>{customerName}</strong>.{" "}
+              {activeTheme.description}
             </p>
+
+            <div className="dynamic-hero-badges">
+              <span>{activeTheme.badgeOne}</span>
+              <span>{activeTheme.badgeTwo}</span>
+              <span>{activeTheme.badgeThree}</span>
+            </div>
 
             <form className="hero-search-box" onSubmit={handleFoodSearch}>
               <div className="search-field">
@@ -167,15 +324,20 @@ export default function CustomerDashboardPage() {
 
                 <select
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) =>
+                    setSelectedCategory(e.target.value as DashboardCategory)
+                  }
                 >
-                  <option value="">Select Category</option>
                   <option value="Pizza">Pizza</option>
                   <option value="Burger">Burger</option>
+                  <option value="Coffee">Coffee</option>
                   <option value="Koththu">Koththu</option>
                   <option value="Pasta">Pasta</option>
                   <option value="Dessert">Dessert</option>
-                  <option value="Coffee">Coffee</option>
+                  <option value="Chicken">Chicken</option>
+                  <option value="Shakes">Shakes</option>
+                  <option value="Sandwiches">Sandwiches</option>
+                  <option value="Broast">Broast</option>
                 </select>
               </div>
 
@@ -191,9 +353,15 @@ export default function CustomerDashboardPage() {
             <div className="video-dark-gradient"></div>
             <div className="video-gold-glow"></div>
 
-            <div className="video-floating-chip chip-one">Fresh</div>
-            <div className="video-floating-chip chip-two">Premium</div>
-            <div className="video-floating-chip chip-three">Hot</div>
+            <div className="video-floating-chip chip-one">
+              {activeTheme.badgeOne}
+            </div>
+            <div className="video-floating-chip chip-two">
+              {activeTheme.badgeTwo}
+            </div>
+            <div className="video-floating-chip chip-three">
+              {activeTheme.badgeThree}
+            </div>
           </div>
 
           <div className="hero-orbit-foods">
