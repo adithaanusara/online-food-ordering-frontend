@@ -8322,3 +8322,262 @@ body {
     align-items: start;
   }
 }
+
+/* ================================
+   Landing Page Mobile Responsive Fix
+================================ */
+
+@media (max-width: 768px) {
+  .landing-page,
+  .home-page,
+  .hero-section,
+  .landing-hero {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header / Navbar */
+  .navbar,
+  .landing-navbar,
+  .home-navbar {
+    padding: 18px 20px;
+    align-items: center;
+  }
+
+  .navbar .logo,
+  .landing-navbar .logo,
+  .home-navbar .logo,
+  .brand-logo {
+    font-size: 28px;
+  }
+
+  .nav-links,
+  .navbar-links,
+  .landing-nav-links {
+    display: none;
+  }
+
+  .get-started-btn,
+  .navbar .get-started,
+  .landing-navbar .get-started {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  /* Hero layout */
+  .hero,
+  .landing-hero,
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 34px;
+    padding: 42px 22px 70px;
+    min-height: auto;
+  }
+
+  .hero-content,
+  .landing-hero-content,
+  .hero-text {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hero-content .welcome,
+  .hero-subtitle,
+  .hero-mini-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .hero-content h1,
+  .landing-hero-content h1,
+  .hero-title {
+    font-size: clamp(42px, 12vw, 58px);
+    line-height: 1.02;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .hero-content p,
+  .landing-hero-content p,
+  .hero-description {
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 100%;
+    margin-top: 20px;
+  }
+
+  .hero-buttons,
+  .landing-buttons,
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button,
+  .landing-buttons a,
+  .landing-buttons button,
+  .hero-actions a,
+  .hero-actions button {
+    min-height: 48px;
+    padding: 0 18px;
+    font-size: 13px;
+  }
+
+  /* Food image area */
+  .hero-image,
+  .hero-visual,
+  .landing-hero-image,
+  .food-orbit-wrapper,
+  .food-hero-visual {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    margin: 10px auto 0;
+    transform: none;
+  }
+
+  .main-food-circle,
+  .main-food-image,
+  .hero-food-main,
+  .food-main-img {
+    width: 220px;
+    height: 220px;
+    max-width: 72vw;
+    max-height: 72vw;
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+  }
+
+  .main-food-circle img,
+  .main-food-image img,
+  .hero-food-main img,
+  .food-main-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .floating-food,
+  .floating-food-one,
+  .floating-food-two,
+  .floating-food-three,
+  .small-food,
+  .food-small-img {
+    width: 74px;
+    height: 74px;
+  }
+
+  .floating-food-one,
+  .small-food-one {
+    left: 12%;
+    top: 58%;
+  }
+
+  .floating-food-two,
+  .small-food-two {
+    right: 10%;
+    top: 26%;
+  }
+
+  .floating-food-three,
+  .small-food-three {
+    right: 20%;
+    bottom: 12%;
+  }
+
+  .scroll-indicator,
+  .mouse-scroll {
+    display: none;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 430px) {
+  .navbar,
+  .landing-navbar,
+  .home-navbar {
+    padding: 16px 14px;
+  }
+
+  .navbar .logo,
+  .landing-navbar .logo,
+  .home-navbar .logo,
+  .brand-logo {
+    font-size: 24px;
+  }
+
+  .hero,
+  .landing-hero,
+  .hero-section {
+    padding: 34px 16px 56px;
+    gap: 26px;
+  }
+
+  .hero-content h1,
+  .landing-hero-content h1,
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .hero-content p,
+  .landing-hero-content p,
+  .hero-description {
+    font-size: 14px;
+  }
+
+  .hero-buttons,
+  .landing-buttons,
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button,
+  .landing-buttons a,
+  .landing-buttons button,
+  .hero-actions a,
+  .hero-actions button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-image,
+  .hero-visual,
+  .landing-hero-image,
+  .food-orbit-wrapper,
+  .food-hero-visual {
+    height: 280px;
+  }
+
+  .main-food-circle,
+  .main-food-image,
+  .hero-food-main,
+  .food-main-img {
+    width: 190px;
+    height: 190px;
+  }
+
+  .floating-food,
+  .floating-food-one,
+  .floating-food-two,
+  .floating-food-three,
+  .small-food,
+  .food-small-img {
+    width: 62px;
+    height: 62px;
+  }
+}
