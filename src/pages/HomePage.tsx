@@ -1,7 +1,9 @@
 import { MouseEvent, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {useState} from "react";
 
 export default function HomePage() {
+  const[mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>(".steak-section");
 
@@ -114,22 +116,52 @@ export default function HomePage() {
   return (
     <div onClick={scrollToNextSection} className="steak-home">
       {/* Navigation */}
-      <header className="steak-navbar">
-        <Link to="/" className="steak-logo">
-          FoodExpress
-        </Link>
+<header className="landing-navbar">
+  <Link to="/" className="landing-logo">
+    FoodExpress
+  </Link>
 
-        <nav className="steak-nav-links">
-          <a href="#home">Home</a>
-          <a href="#story">About</a>
-          <a href="#menu">Menu</a>
-          <a href="#roles">Roles</a>
-          <Link to="/signin">Sign In</Link>
-          <Link to="/signup" className="nav-reserve-btn">
-            Get Started
-          </Link>
-        </nav>
-      </header>
+  <button
+    type="button"
+    className="mobile-menu-btn"
+    onClick={() => setMobileMenuOpen((prev) => !prev)}
+    aria-label="Toggle menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav className={mobileMenuOpen ? "landing-nav open" : "landing-nav"}>
+    <a href="#home" onClick={() => setMobileMenuOpen(false)}>
+      Home
+    </a>
+
+    <a href="#about" onClick={() => setMobileMenuOpen(false)}>
+      About
+    </a>
+
+    <a href="#menu" onClick={() => setMobileMenuOpen(false)}>
+      Menu
+    </a>
+
+    <a href="#roles" onClick={() => setMobileMenuOpen(false)}>
+      Roles
+    </a>
+
+    <Link to="/signin" onClick={() => setMobileMenuOpen(false)}>
+      Sign In
+    </Link>
+
+    <Link
+      to="/signup"
+      className="landing-get-started"
+      onClick={() => setMobileMenuOpen(false)}
+    >
+      Get Started
+    </Link>
+  </nav>
+</header>
 
       {/* Section 1 - Hero */}
       <section id="home" className="steak-section hero-section">
